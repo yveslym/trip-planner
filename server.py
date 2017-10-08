@@ -52,9 +52,7 @@ class User(Resource):
             return ({'error':'country was not  found in the database'}, 404,None)
         user_collect = app.db.users
         # pdb.set_trace()
-        user_dict = user_collect.find({
-            'country': 'usa'
-        })
+        user_dict = user_collect.find({'country': user_country})
         print(user_dict)
         if user_dict is None:
             return ({'error':'user does not exist'}, 404, None)
@@ -62,21 +60,15 @@ class User(Resource):
             arr = []
             for user in user_dict:
                 arr.append(user)
-                print(user)
-            return (arr,200, None)
-            #
-        # user_col = app.db.users
-        #
-        # user = user_col.find_one({
-        #     'email': 'Shea.Boone@dawnsonmail.com'
-        # })
-        #
-        # if not user:
-        #     return ({'error': 'why the fuck?'}, 404, None)
-        # else:
-        #     return (user, 200, None)
 
-    def is_user_exist(self, email):
+            return (arr,200, None)
+
+
+
+    def patch(self):
+
+
+     def is_user_exist(self, email):
         user_collect = app.db.users
         user_dict = user_collect.find_one({'email': email})
 

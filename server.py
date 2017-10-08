@@ -64,6 +64,7 @@ class User(Resource):
                 arr.append(user)
                 print(user)
             return (arr,200, None)
+            #
         # user_col = app.db.users
         #
         # user = user_col.find_one({

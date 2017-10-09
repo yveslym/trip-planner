@@ -6,7 +6,7 @@ import bcrypt
 import base64
 from pymongo import MongoClient
 import random
-
+from randomUser import Create_user
 
 class TripPlannerTestCase(unittest.TestCase):
     def setUp(self):
@@ -32,39 +32,33 @@ class TripPlannerTestCase(unittest.TestCase):
 
     #creating 5 user everytime we run the test
         index = 0
-        while index < 100:
-            file = "/Users/yveslym/Desktop/portfolio/CS1/Hangman_Project/hangman_words.txt"
-            name_file = "/Users/yveslym/Desktop/portfolio/MOB2/trip-planner/name.txt"
-            domain_file = "/Users/yveslym/Desktop/portfolio/MOB2/trip-planner/domain.txt"
-            open_name_file = open(name_file).read().split()
-            open_domain_file = open(domain_file).read().split()
+        while index < 10:
+            user = Create_user.create()
+            index = index+1
 
-            fname = open_name_file[random.randint(0,len(open_name_file)-1)]
-            lname = open_name_file[random.randint(0,len(open_name_file)-1)]
-            domain_name = open_domain_file[random.randint(0,len(open_domain_file)-1)]
+    def test_post_user(self):
+        user = Create_user.create()
+        response = self.app.post('/users',
+                                 headers = None,
+                                 data = json.dump(dict(user)),
+                                 content_type = 'application/json')
+        self.assertEqual(response.status_code,201)
+        print("end of the post User")
 
-            uname = fname+lname
-            mail = fname+'.'+lname+'@'+domain_name
-
-            pw = fname+lname+str(index)
-            user = User()
-            user.email = mail
-            user.last_name = lname
-            user.first_name = fname
-            user.username = uname
-            user.password = pw
-            user.country = 'usa'
-            print(" ")
-            print(" ")
+        # response = self.app.post('/users',
+        #                          headers=None,
+        #                          data=json.dumps(dict(
+        #                              username="Eliel Gordon",
+        #                              email="eliel@example.com",
+        #                              password="password"
+        #                          )),
+        #                          content_type='application/json')
+        #
+        # self.assertEqual(response.status_code, 201)
 
 
-            print(fname+' '+lname)
-            if user.is_user_exist(mail) is True:
-                print('user exist')
-                index = index - 1
-            index = index + 1
 
-        print("end of inser user text")
+        # print("end of inser user text")
 
 
 

@@ -10,7 +10,6 @@ class Create_user(object):
 
 
     def create(self):
-        file = "/Users/yveslym/Desktop/portfolio/CS1/Hangman_Project/hangman_words.txt"
         name_file = "/Users/yveslym/Desktop/portfolio/MOB2/trip-planner/name.txt"
         domain_file = "/Users/yveslym/Desktop/portfolio/MOB2/trip-planner/domain.txt"
         country_file = "/Users/yveslym/Desktop/portfolio/MOB2/trip-planner/country.txt"
@@ -38,5 +37,3 @@ class Create_user(object):
 
 
         return(user)
-
-

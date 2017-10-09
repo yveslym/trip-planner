@@ -16,7 +16,7 @@ api = Api(app)
 
 ## Write Resources here
 
-
+#
 # class Pre_Trip1(Document):
 #     pass
 # class Pre_Trip2(Resource):

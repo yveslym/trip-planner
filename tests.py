@@ -37,7 +37,7 @@ class TripPlannerTestCase(unittest.TestCase):
             index = index+1
 
     def test_post_user(self):
-        user = Create_user.create()
+        user = Create_user.create(self)
         response = self.app.post('/users',
                                  headers = None,
                                  data = json.dump(dict(user)),

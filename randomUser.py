@@ -1,11 +1,13 @@
-
+import server
+from server import *
 import random
 import string
 
 class Create_user(object):
-    @staticmethod
+
     def password(size=8, chars=string.ascii_lowercase+string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
+
 
     def create(self):
         file = "/Users/yveslym/Desktop/portfolio/CS1/Hangman_Project/hangman_words.txt"
@@ -21,17 +23,20 @@ class Create_user(object):
         fname = open_name_file[random.randint(0, len(open_name_file) - 1)]
         lname = open_name_file[random.randint(0, len(open_name_file) - 1)]
         domain_name = open_domain_file[random.randint(0, len(open_domain_file) - 1)]
-        pword = password()
+
         uname = fname + lname
         mail = fname + '.' + lname + '@' + domain_name
 
-        print('New User: '+fname+' '+lname+' '+country)
-        user = {'first_name':fname,
-                'last_name':lname,
-                'email':email,
-                'password':Create_user.password(),
-                'username':uname,
-                'country':country}
+
+        user = User()
+        user.first_name = fname
+        user.last_name = lname
+        user.email = mail
+        user.country = country
+        user.password = ''
+        user.username = uname
+
+
         return(user)
 
 

@@ -7,6 +7,7 @@ import base64
 from pymongo import MongoClient
 import random
 from randomUser import Create_user
+import string
 
 class TripPlannerTestCase(unittest.TestCase):
     def setUp(self):
@@ -24,41 +25,47 @@ class TripPlannerTestCase(unittest.TestCase):
       db = mongo.trip_planner_test
       server.app.db = db
 
-      db.drop_collection('users')
-      db.drop_collection('trips')
+      # db.drop_collection('users')
+      # db.drop_collection('trips')
 
-    # User tests, fill with test methods
-    def testCreateUser(self):
 
-    #creating 5 user everytime we run the test
-        index = 0
-        while index < 10:
-            user = Create_user.create()
-            index = index+1
 
     def test_post_user(self):
-        user = Create_user.create(self)
+
+        new_user = Create_user()
+        user = new_user.create()
+
         response = self.app.post('/users',
                                  headers = None,
-                                 data = json.dump(dict(user)),
+                                 data = json.dumps(dict(first_name = user.first_name,
+                                                        last_name = user.last_name,
+                                                        email = user.email,
+                                                        password = "",
+                                                        country = user.country,
+                                                        username = user.username)),
                                  content_type = 'application/json')
         self.assertEqual(response.status_code,201)
         print("end of the post User")
 
-        # response = self.app.post('/users',
-        #                          headers=None,
-        #                          data=json.dumps(dict(
-        #                              username="Eliel Gordon",
-        #                              email="eliel@example.com",
-        #                              password="password"
-        #                          )),
-        #                          content_type='application/json')
-        #
-        # self.assertEqual(response.status_code, 201)
+    def test_post_with_missing_field(self):
+        # for this test i purposely omit the email field and expect an error
+        new_user = Create_user()
+        user = new_user.create()
+
+        response = self.app.post('/users',
+                                 headers=None,
+                                 data=json.dumps(dict(first_name=user.first_name,
+                                                      last_name=user.last_name,
+                                                      password="",
+                                                      country=user.country,
+                                                      username=user.username)),
+                                 content_type='application/json')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data.decode("utf-8"), '{"error": "missing fields"}')
 
 
 
-        # print("end of inser user text")
 
 
 
@@ -66,4 +73,5 @@ class TripPlannerTestCase(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
     tripTest = TripPlannerTestCase
-    tripTest.testCreateUser()
+    #tripTest.testCreateUser()
+

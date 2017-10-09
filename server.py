@@ -83,48 +83,68 @@ class Trip(Resource):
 
 
 class User(Resource):
-    first_name = ""  # StringField(required=True, max_length=30)
-    last_name = ""  # StringField(required=True, max_length=30)
-    email = ""  # EmailField(required=True, unique=True)
-    password = ""  # StringField (required=True, max_length=30)
-    username = ""  # StringField(max_length=30)
-    country = ""
+    def __init__(self):
+        self.first_name = ''  # StringField(required=True, max_length=30)
+        self.last_name = ''  # StringField(required=True, max_length=30)
+        self.email = ''  # EmailField(required=True, unique=True)
+        self.password = '' # StringField (required=True, max_length=30)
+        self.username = ''  # StringField(max_length=30)
+        self.country = ''
 
     def post(self):
-        user_dict = request.json
+        user_json = request.json
         user_collect = app.db.users
+        # user_fname = request.json.get('first_name')
 
-        if 'first_name' in user_dict and 'last_name' in user_dict and 'email' in user_dict and 'pasword' in user_dict:
-            post = user_collect.insert_one(user_dict)
-            return (post, 201, None)
-        elif 'email' in user_dict is None:
+        if 'first_name' in user_json and 'last_name' in user_json and 'email' in user_json:
+            print('json user: ')
+            print(user_json)
+            user_collect = app.db.users
+            user_collect.insert_one(user_json)
+            return (user_json, 201, None)
+        elif 'email' in user_json is None:
             return ({'error': 'no email provided'}, 400, None)
-        elif 'password' in user_dict is None:
-            return ({'error': 'Not password provided'}, 400, None)
-        elif 'first_name' in user_dict is None or 'last_name' in user_dict is None:
+        # elif 'password' in user_json is None:
+        #     return ({'error': 'Not password provided'}, 400, None)
+        elif 'first_name' in user_json is None or 'last_name' in user_json is None:
             return ({'error': 'either first name or last name were not passed'}, 400, None)
         else:
             return ({'error': 'there is other error'}, 400, None)
 
     def get(self):
 
-        user_email = request.args.get('email')
-        print(user_email)
-        if user_email is None:
-            print('country ', user_email)
-            return ({'error': 'user was not found in the database'}, 404, None)
-        user_collect = app.db.users
-        # pdb.set_trace()
-        user_dict = user_collect.find_one({'email': user_email})
-        print(user_dict)
+        # user_email = request.args.get('email')
+        user_country = request.args.get('country')
+        # print(user_email)
+        # if user_email is None:
+        #     return ({'error': 'no email argument was passed'}, 404, None)
+        #
+        # user_collect = app.db.users
+        #
+        # user_dict = user_collect.find_one({'email': user_email})
+        # print(user_dict)
+        # if user_dict is None:
+        #     return ({'error': 'user does not exist'}, 404, None)
+        # else:
+        #     # arr = []
+        #     # for user in user_dict:
+        #     #     arr.append(user)
+        #
+        #     return (user_dict, 200, None)
+
+        #country argument get multy user.
+
+        if user_country is None:
+            return ({'error': 'no country argument was passed'}, 404, None)
+        user_dict = app.db.users.find({'country':user_country})
         if user_dict is None:
             return ({'error': 'user does not exist'}, 404, None)
         else:
-            # arr = []
-            # for user in user_dict:
-            #     arr.append(user)
+            arr = []
+            for user in user_dict:
+                arr.append(user)
 
-            return (user_dict, 200, None)
+            return (arr, 200, None)
 
     def patch(self):
         user_email = request.arg.get('email')

@@ -95,21 +95,27 @@ class User(Resource):
         user_json = request.json
         user_collect = app.db.users
         # user_fname = request.json.get('first_name')
+        user_email = request.json.get('email')
 
+        print('USER EMAIL ',user_email )
         if 'first_name' in user_json and 'last_name' in user_json and 'email' in user_json:
             print('json user: ')
             print(user_json)
-            user_collect = app.db.users
-            user_collect.insert_one(user_json)
-            return (user_json, 201, None)
+            if self.is_user_exist(user_email) is False:
+                user_collect = app.db.users
+                user_collect.insert_one(user_json)
+                return (user_json, 201, None)
+            else:
+                return ({'error': 'user exist already'}, 400, None)
+
         elif 'email' in user_json is None:
             return ({'error': 'no email provided'}, 400, None)
         # elif 'password' in user_json is None:
         #     return ({'error': 'Not password provided'}, 400, None)
         elif 'first_name' in user_json is None or 'last_name' in user_json is None:
             return ({'error': 'either first name or last name were not passed'}, 400, None)
-        else:
-            return ({'error': 'there is other error'}, 400, None)
+        # else:
+        #     return ({'error': 'there is other error'}, 400, None)
 
     def get(self):
 
@@ -146,6 +152,18 @@ class User(Resource):
 
             return (arr, 200, None)
 
+    def delete(self):
+        email_json = request.args.get('email')
+
+        if self.is_user_exist(email_json) is True:
+            user_dict = app.db.users.find_one({'email':email_json})
+            app.db.users.remove(user_dict)
+            return ({'delete':'the user '+ email_json+ ' as been deleted'}, 200, None)
+        else:
+
+            print ('user does not exist')
+            return ({'error': 'User with email ' + email_json + " does not exist"}, 404, None)
+
     def patch(self):
         user_email = request.arg.get('email')
         user_json = request.json
@@ -180,17 +198,9 @@ class User(Resource):
         user_dict = user_collect.find_one({'email': email})
 
         if user_dict is None:
-
-            user_dict = {'first_name': self.first_name,
-                         'last_name': self.last_name,
-                         'email': self.email,
-                         'password': self.password,
-                         'username': self.username,
-                         'country': self.country}
-            user_collect.insert_one(user_dict)
-
             return False
         else:
+            print('User exist already')
             return True
 
 

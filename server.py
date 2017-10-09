@@ -48,6 +48,8 @@ class Trip(Resource):
     def post(self):
         trip_collect = app.db.posts
         trip_json = request.json
+
+
         name = request.json('name')
         destination = request.json('destination')
         user = request.jason('user')
@@ -186,8 +188,7 @@ def output_json(data, code, headers=None):
 
 
 if __name__ == '__main__':
-    trips = Trip()
-    trips.test()
+
     # Turn this on in debug mode to get detailled information about request
     # related exceptions: http://flask.pocoo.org/docs/0.10/config/
     app.config['TRAP_BAD_REQUEST_ERRORS'] = True

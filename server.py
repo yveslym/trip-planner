@@ -157,7 +157,7 @@ class User(Resource):
 
         if self.is_user_exist(email_json) is True:
             user_dict = app.db.users.find_one({'email':email_json})
-            app.db.users.remove(user_dict)
+            app.db.users.delete_one(user_dict)
             return ({'delete':'the user '+ email_json+ ' as been deleted'}, 200, None)
         else:
 

@@ -1,5 +1,6 @@
 import server
-from server import *
+from server import Trip
+from server import User
 import random
 from random import randint
 import string
@@ -46,14 +47,13 @@ class create_trip(object):
         uk_arr = ['london','manchester','leads','liverpool','newcastel','combridge','glasgow','oxford']
         usa_arr = ['san fransico','new york','washington','los angeles','miami','ohio','philladelphia','oakland','new jersey']
         canada_arr = ['toronto','ottawa','Vancouver','Montreal','Calgary','Edmonton','Quebec','victoria','Sakatoon','Kingston','Regina']
-
-        dest_index = randint(0,len(coutry_arr)-1)
-
-
-
-
+        i = 0
+        while i < 100:
+            dest_index = randint(0,len(coutry_arr)-1)
+            i = i+1
         stop_point = []
         destination = coutry_arr[dest_index]
+        print(destination)
 
         if destination == 'france':
             i = 0
@@ -85,14 +85,15 @@ class create_trip(object):
                 del canada_arr[canada_index]
                 i = i+1
 
-            trip_name = 'my trip to '+destination
+        trip_name = 'my trip to '+destination
 
-            trip = Trip()
-            trip.destination = destination
-            trip.name = trip_name
-            trip.stop_point = stop_point
-            trip.start_date = datetime.date.today()
-            return trip
+        trip = Trip()
+        trip.destination = destination
+        trip.name = trip_name
+        trip.stop_point = stop_point
+        trip.start_date = str(datetime.date.today())
+
+        return trip
 
             # print (trip.name)
             # print(trip.destination)

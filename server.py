@@ -7,6 +7,7 @@ import bcrypt
 from mongoengine import *
 import pdb
 
+
 app = Flask(__name__)
 mongo = MongoClient('localhost', 27017)
 app.db = mongo.trip_planner_test
@@ -38,36 +39,37 @@ api = Api(app)
 
 class Trip(Resource):
     def __init__(self):
-        self.name = StringField()
-        self.destination = StringField()
-        self.stop_point = ListField()
+        self.name = ''
+        self.destination = ''
+        self.stop_point = []
         self.completed = False
-        self.start_date = DateTimeField()
-        self.user_id = StringField()
+        self.start_date = ''
+        self.user_id = ''
 
     def post(self):
         trip_collect = app.db.posts
         trip_json = request.json
 
 
-        name = request.json('name')
-        destination = request.json('destination')
-        user = request.jason('user')
-        completed = request.jason('completed')
-        start_date = request.json('start_date')
+        name = request.json.get('name')
+        destination = request.json.get('destination')
+        #user = request.json.get('user')
+        completed = request.json.get('completed')
+        start_date = request.json.get('start_date')
 
         if name is None:
             return({'error':' trip name field is missing'},400,None)
         elif destination is None:
             return({'error':'trip destination field is missing'},400,None)
-        elif user is None:
-            return({'error':' user trip field is missing'},400,None)
+        # elif user is None:
+        #     return({'error':' user trip field is missing'},400,None)
         elif completed is None:
             return({'error':' trip status trip field is missing'},400,None)
         elif start_date is None:
             return({'error':' trip starting date field is missing'},400,None)
         else:
             trip_collect.insert_one(trip_json)
+            trip_dict = trip_collect.find_one({'start_date':start_date})
             return (trip_dict,200,None)
 
     def get(self):
@@ -223,6 +225,10 @@ class User(Resource):
         else:
             print('User exist already')
             return True
+
+
+
+
 
 
 ## Add api routes here

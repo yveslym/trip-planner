@@ -6,7 +6,8 @@ import bcrypt
 import base64
 from pymongo import MongoClient
 from random import  randint
-from randomUser import *
+from randomUser import create_trip
+from randomUser import Create_user
 
 
 class TripPlannerTestCase(unittest.TestCase):
@@ -31,7 +32,7 @@ class TripPlannerTestCase(unittest.TestCase):
 
 
     def test_post_user(self):
-        print('______________________TESTING INSERT USER__________________')
+        print('______________________TESTING POST USER__________________')
         new_user = Create_user()
         user = new_user.create()
 
@@ -44,8 +45,10 @@ class TripPlannerTestCase(unittest.TestCase):
                                                         country = user.country,
                                                         username = user.username)),
                                  content_type = 'application/json')
+        print('post new user response:')
+        print(response)
         self.assertEqual(response.status_code,201)
-        print("end of the post User")
+
 
     # def test_post_with_missing_field(self):
     #
@@ -70,6 +73,7 @@ class TripPlannerTestCase(unittest.TestCase):
 
         #expect to get an error, with message user exist
         print('______________________TESTING POST EXISTING USER__________________')
+
         post = self.app.post('/users',
                                  headers = None,
                                  data = json.dumps(dict(
@@ -81,17 +85,24 @@ class TripPlannerTestCase(unittest.TestCase):
 
                                  )),
                                  content_type = 'application/json')
+        print('post with existing user reponse:')
+        print(post)
         self.assertEqual(post.status_code, 400)
 
     def test_get_user(self):
+        #randomly get a country
+        index = randint(0, 3)
+        arr = ['usa','canada','uk','france']
+        countr = arr[index]
         print('______________________TESTING GET USER__________________')
         response = self.app.get('/users',
-                                query_string=dict(country = 'usa')
+                                query_string=dict(country = countr)
                                 )
 
-
+        print('get user response:')
+        print(response)
         response_json = json.loads(response.data.decode())
-        # print(response_json)
+
         self.assertEqual(response.status_code, 200)
 
     def test_delete_user(self):
@@ -123,16 +134,56 @@ class TripPlannerTestCase(unittest.TestCase):
                                   )
         self.assertEqual(deleted.status_code, 200)
 
-        print('NOW DELTETING A NONE EXISTING USER')
+        print('delete user response:')
+        print(deleted)
 
         deleted = self.app.delete('/users',
                                   query_string=dict(email=mail)
                                   )
 
+        print('delte non existing user response:')
+        print(deleted)
         self.assertEqual(deleted.status_code, 404)
         self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
 
+    def test_post_trip_with_user_id(self):
+
+        print('_____________POST TRIP WITH USER ID______________________')
+        #randomly get a country
+        index = randint(0, 3)
+        arr = ['usa','canada','uk','france']
+        countr = arr[index]
+        response = self.app.get('/users',
+                                query_string=dict(country = countr)
+                                )
+        #get a user dict from array randomly
+        ind = randint(0,len(response.data)-1)
+        user = response.data[ind]
+        mytrip = create_trip()
+        trip = mytrip.create()
+
+        if user['_id'] is not None:
+            trip.user_id = user['_id']
+
+
+        post = self.app.post('/trips',
+                      headers = None,
+                      data = json.dumps(dict(name = trip.name,
+                                             destination = trip.destination,
+                                             stop_point = trip.stop_point,
+                                             start_date = trip.start_date,
+                                             completed = trip.completed,
+                                             user_id = trip.user_id)),
+                      content_type = 'application/json')
+        print('post trip with user id response:')
+        print(post)
+        self.assertEqual(post.status_code, 200)
+
     def test_trip_post(self):
+
+
+        print('______________________TESTING POST TRIP__________________')
+
         mytrip = create_trip()
         trip = mytrip.create()
 
@@ -142,20 +193,30 @@ class TripPlannerTestCase(unittest.TestCase):
                                              destination = trip.destination,
                                              stop_point = trip.stop_point,
                                              start_date = trip.start_date,
-                                             completed = trip.completed))
-                      content_type ='application/json')
+                                             completed = trip.completed)),
+                      content_type = 'application/json')
+
+        print('post trip response:')
+        print(post)
         self.assertEqual(post.status_code, 200)
+
     def test_trip_post_missing_field(self):
+
+        print('______________________TESTING POST TRIP WITH MISSING FIELD__________________')
+
         mytrip = create_trip()
         trip = mytrip.create()
+
 
         post = self.app.post('/trips',
                       headers = None,
                       data = json.dumps(dict(name = trip.name,
                                              stop_point = trip.stop_point,
                                              start_date = trip.start_date,
-                                             completed = trip.completed))
-                      content_type = ('application/json')
+                                             completed = trip.completed)),
+                      content_type = 'application/json')
+        print('post request with missing field:')
+        print(post)
         self.assertEqual(post.status_code, 400)
 
 

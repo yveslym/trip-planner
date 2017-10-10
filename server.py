@@ -147,8 +147,10 @@ class User(Resource):
         # user_fname = request.json.get('first_name')
         user_email = request.json.get('email')
 
+        print('USER EMAIL ',user_email )
         if 'first_name' in user_json and 'last_name' in user_json and 'email' in user_json:
-
+            print('json user: ')
+            print(user_json)
             if self.is_user_exist(user_email) is False:
                 user_collect = app.db.users
                 user_collect.insert_one(user_json)

@@ -118,11 +118,9 @@ class TripPlannerTestCase(unittest.TestCase):
         response = self.app.get('/users',
                                 query_string=dict(country=countr))
         response_json = json.loads(response.data.decode())
-
         user_array = []
         for user in response_json:
             user_array.append(user)
-
         user = user_array[randint(0,len(user_array) -1 )]
         mail = user['email']
 
@@ -152,6 +150,16 @@ class TripPlannerTestCase(unittest.TestCase):
 
         #find trips by user id
 
+        deleted = self.app.delete('/users',
+                                  query_string=dict(email=mail)
+                                  )
+self.assertEqual(deleted.status_code, 404)
+self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
+
+
+
+
+
 
     def test_post_trip_with_user_id(self):
 
@@ -172,7 +180,7 @@ class TripPlannerTestCase(unittest.TestCase):
         ind = randint(0,len(users_list) - 1)
         user = users_list[ind]
 
-        #insert 
+        #insert
 
         trip.user_id = user['_id']
 

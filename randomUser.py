@@ -1,7 +1,9 @@
 import server
 from server import *
 import random
+from random import randint
 import string
+import datetime
 
 class Create_user(object):
 
@@ -34,6 +36,66 @@ class Create_user(object):
         user.country = country
         user.password = ''
         user.username = uname
-
-
         return(user)
+
+class create_trip(object):
+    def create(self):
+        trip = Trip()
+        coutry_arr = ['france','uk','usa','canada']
+        france_arr = ['paris','marseille','bordeaux','nice','lyon','toulouse','lille','monpelier','nante']
+        uk_arr = ['london','manchester','leads','liverpool','newcastel','combridge','glasgow','oxford']
+        usa_arr = ['san fransico','new york','washington','los angeles','miami','ohio','philladelphia','oakland','new jersey']
+        canada_arr = ['toronto','ottawa','Vancouver','Montreal','Calgary','Edmonton','Quebec','victoria','Sakatoon','Kingston','Regina']
+
+        dest_index = randint(0,len(coutry_arr)-1)
+
+
+
+
+        stop_point = []
+        destination = coutry_arr[dest_index]
+
+        if destination == 'france':
+            i = 0
+            while i<5:
+                fr_index =  randint(0,len(france_arr)-1)
+                stop_point.append(france_arr[fr_index])
+                del france_arr[fr_index]
+                i = i+1
+        elif destination == 'uk':
+            i = 0
+            while i<5:
+                uk_index = randint(0,len(uk_arr)-1)
+                stop_point.append(uk_arr[uk_index])
+                del uk_arr[uk_index]
+                i = i+1
+        elif destination == 'usa':
+            i = 0
+            while i<5:
+                usa_index = randint(0,len(usa_arr)-1)
+                stop_point.append(usa_arr[usa_index])
+                del usa_arr[usa_index]
+                i = i+1
+
+        elif destination =='canada':
+            i = 0
+            while i<5:
+                canada_index = randint(0,len(canada_arr)-1)
+                stop_point.append(canada_arr[canada_index])
+                del canada_arr[canada_index]
+                i = i+1
+
+            trip_name = 'my trip to '+destination
+
+            trip = Trip()
+            trip.destination = destination
+            trip.name = trip_name
+            trip.stop_point = stop_point
+            trip.start_date = datetime.date.today()
+            return trip
+
+            # print (trip.name)
+            # print(trip.destination)
+            # print(trip.stop_point)
+            # print(trip.start_date)
+            # print(trip.completed)

@@ -37,13 +37,13 @@ api = Api(app)
 #         print('trip class work')
 
 class Trip(Resource):
-    def __init__(self,name,destination):
-        self.name = name
-        self.destination = destination
+    def __init__(self):
+        self.name = StringField()
+        self.destination = StringField()
         self.stop_point = ListField()
         self.completed = False
-        self.start_date = StringField(max_length=20)
-        self.user = ReferenceField(User)
+        self.start_date = DateTimeField()
+        self.user_id = StringField()
 
     def post(self):
         trip_collect = app.db.posts
@@ -69,6 +69,34 @@ class Trip(Resource):
         else:
             trip_collect.insert_one(trip_json)
             return (trip_dict,200,None)
+
+    def get(self):
+
+        #check if there's trip with current user Reference
+        if json.args.get('user_id') is not None:
+            trip_dict = app.db.find({'user_id':json.args.get('user_id')})
+            if trip_dict is not None:
+                arr = []
+                for trip in trip_dict:
+                    arr.append(trip)
+                return(arr,200,None)
+            else:
+                return({'error':' No trip found for the current user'},400,None)
+
+        elif request.args.get('user_id') is not None and request.args.get('name') is not None:
+            trip_dict = app.db.find({'user_id':json.args.get('user_id'),
+                                    'name':request.args.get('name')})
+            if trip_dict is not None:
+                arr = []
+                for trip in trip_dict:
+                    arr.append(trip)
+                return(arr,200,None)
+            else:
+                return({'error':' No trip found the user and trip name argument given'},400,None)
+        else:
+            return({'error':' No argument have been passed, enter either user reference or user reference and trip name'},400,None)
+
+
 
 
 
@@ -200,7 +228,7 @@ class User(Resource):
 ## Add api routes here
 
 api.add_resource(User, '/users')
-api.add_ressource(Trip,'/trips')
+api.add_resource(Trip,'/trips')
 
 
 #  Custom JSON serializer for flask_restful

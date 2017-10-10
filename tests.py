@@ -6,7 +6,7 @@ import bcrypt
 import base64
 from pymongo import MongoClient
 from random import  randint
-from randomUser import Create_user
+from randomUser import *
 
 
 class TripPlannerTestCase(unittest.TestCase):
@@ -91,7 +91,7 @@ class TripPlannerTestCase(unittest.TestCase):
 
 
         response_json = json.loads(response.data.decode())
-        print(response_json)
+        # print(response_json)
         self.assertEqual(response.status_code, 200)
 
     def test_delete_user(self):
@@ -132,6 +132,31 @@ class TripPlannerTestCase(unittest.TestCase):
         self.assertEqual(deleted.status_code, 404)
         self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
 
+    def test_trip_post(self):
+        mytrip = create_trip()
+        trip = mytrip.create()
+
+        post = self.app.post('/trips',
+                      headers = None,
+                      data = json.dumps(dict(name = trip.name,
+                                             destination = trip.destination,
+                                             stop_point = trip.stop_point,
+                                             start_date = trip.start_date,
+                                             completed = trip.completed))
+                      content_type ='application/json')
+        self.assertEqual(post.status_code, 200)
+    def test_trip_post_missing_field(self):
+        mytrip = create_trip()
+        trip = mytrip.create()
+
+        post = self.app.post('/trips',
+                      headers = None,
+                      data = json.dumps(dict(name = trip.name,
+                                             stop_point = trip.stop_point,
+                                             start_date = trip.start_date,
+                                             completed = trip.completed))
+                      content_type = ('application/json')
+        self.assertEqual(post.status_code, 400)
 
 
 if __name__ == '__main__':

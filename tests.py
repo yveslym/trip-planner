@@ -2,6 +2,7 @@ import server
 from server import *
 import unittest
 import json
+from pprint import pprint
 import bcrypt
 import base64
 from pymongo import MongoClient
@@ -146,26 +147,38 @@ class TripPlannerTestCase(unittest.TestCase):
         self.assertEqual(deleted.status_code, 404)
         self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
 
+
+    def test_delete_user_with_all_rips(self):
+
+        #find trips by user id
+
+
     def test_post_trip_with_user_id(self):
 
         print('_____________POST TRIP WITH USER ID______________________')
-        #randomly get a country
+        #randomly get an array of user by country
         index = randint(0, 3)
         arr = ['usa','canada','uk','france']
         countr = arr[index]
         response = self.app.get('/users',
                                 query_string=dict(country = countr)
                                 )
-        #get a user dict from array randomly
-        ind = randint(0,len(response.data)-1)
-        user = response.data[ind]
+        # create a new trip
         mytrip = create_trip()
         trip = mytrip.create()
 
-        if user['_id'] is not None:
-            trip.user_id = user['_id']
+        # randomly get a user dict from array
+        users_list = json.loads(response.data.decode())# transform data into list
+        ind = randint(0,len(users_list) - 1)
+        user = users_list[ind]
 
+        #insert 
 
+        trip.user_id = user['_id']
+
+        print('user name: '+user['first_name']+' '+user['last_name'])
+        print('trip destination: '+ trip.destination)
+        print('user id: '+user['_id'])
         post = self.app.post('/trips',
                       headers = None,
                       data = json.dumps(dict(name = trip.name,
@@ -173,7 +186,8 @@ class TripPlannerTestCase(unittest.TestCase):
                                              stop_point = trip.stop_point,
                                              start_date = trip.start_date,
                                              completed = trip.completed,
-                                             user_id = trip.user_id)),
+                                             user_id = trip.user_id,
+                                             trips_id = trip.trip_id)),
                       content_type = 'application/json')
         print('post trip with user id response:')
         print(post)

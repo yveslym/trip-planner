@@ -6,6 +6,7 @@ from bson.objectid import ObjectId
 import bcrypt
 from mongoengine import *
 import pdb
+import uuid
 
 
 app = Flask(__name__)
@@ -45,6 +46,7 @@ class Trip(Resource):
         self.completed = False
         self.start_date = ''
         self.user_id = ''
+        self.trip_id = uuid.uuid4().hex[:20]
 
     def post(self):
         trip_collect = app.db.posts
@@ -53,9 +55,12 @@ class Trip(Resource):
 
         name = request.json.get('name')
         destination = request.json.get('destination')
-        #user = request.json.get('user')
+
+        user_id = request.json.get('user_d')
         completed = request.json.get('completed')
         start_date = request.json.get('start_date')
+        user_id = request.json.get('user_id')
+        trip_id = request.json.get('trip_id')
 
         if name is None:
             return({'error':' trip name field is missing'},400,None)
@@ -67,10 +72,17 @@ class Trip(Resource):
             return({'error':' trip status trip field is missing'},400,None)
         elif start_date is None:
             return({'error':' trip starting date field is missing'},400,None)
-        else:
+        elif trip_id is None:
+            return({'error':' trip starting date field is missing'},400,None)
+
+        elif user_id is not None:
             trip_collect.insert_one(trip_json)
-            trip_dict = trip_collect.find_one({'start_date':start_date})
+            trip_dict = trip_collect.find_one({'user_id':user_id})
             return (trip_dict,200,None)
+
+        else:
+            return (trip_json,200,None)
+
 
     def get(self):
 
@@ -97,6 +109,20 @@ class Trip(Resource):
                 return({'error':' No trip found the user and trip name argument given'},400,None)
         else:
             return({'error':' No argument have been passed, enter either user reference or user reference and trip name'},400,None)
+    def delete(self):
+
+        #delete single trip with user_id
+        if request.args.get('user_id') is not None:
+            app.db.posts.delete_one({'user_id':request.args.get('user_id')})
+            return ({'delete':'the trip as been deleted'}, 200, None)
+
+        #delete single trip with trip id
+        elif request.args.get('_id') is not None:
+            app.db.posts.delete_one({'user_id':request.args.get('_id')})
+            return ({'delete':'Trip  as been deleted'}, 200, None)
+
+
+
 
 
 
@@ -113,6 +139,7 @@ class User(Resource):
         self.password = '' # StringField (required=True, max_length=30)
         self.username = ''  # StringField(max_length=30)
         self.country = ''
+        self.trips_id = []
 
     def post(self):
         user_json = request.json
@@ -120,10 +147,8 @@ class User(Resource):
         # user_fname = request.json.get('first_name')
         user_email = request.json.get('email')
 
-        print('USER EMAIL ',user_email )
         if 'first_name' in user_json and 'last_name' in user_json and 'email' in user_json:
-            print('json user: ')
-            print(user_json)
+
             if self.is_user_exist(user_email) is False:
                 user_collect = app.db.users
                 user_collect.insert_one(user_json)
@@ -142,75 +167,100 @@ class User(Resource):
 
     def get(self):
 
-        # user_email = request.args.get('email')
+        user_email = request.args.get('email')
         user_country = request.args.get('country')
-        # print(user_email)
-        # if user_email is None:
-        #     return ({'error': 'no email argument was passed'}, 404, None)
-        #
-        # user_collect = app.db.users
-        #
-        # user_dict = user_collect.find_one({'email': user_email})
-        # print(user_dict)
-        # if user_dict is None:
-        #     return ({'error': 'user does not exist'}, 404, None)
-        # else:
-        #     # arr = []
-        #     # for user in user_dict:
-        #     #     arr.append(user)
-        #
-        #     return (user_dict, 200, None)
+        print(user_email)
 
-        #country argument get multy user.
+        #get user with email
+        if user_email is not None:
 
-        if user_country is None:
-            return ({'error': 'no country argument was passed'}, 404, None)
-        user_dict = app.db.users.find({'country':user_country})
-        if user_dict is None:
-            return ({'error': 'user does not exist'}, 404, None)
+            user_collect = app.db.users
+
+            user_dict = user_collect.find_one({'email': user_email})
+
+            if user_dict is None:
+                return ({'error': 'user '+ user_email+' does not exist'}, 404, None)
+            else:
+                return (user_dict, 200, None)
+
+        #get multiple user by country
+
+        if user_country is not None:
+
+            user_dict = app.db.users.find({'country':user_country})
+            if user_dict is None:
+                return ({'error': 'there is not user in this country'}, 404, None)
         else:
             arr = []
             for user in user_dict:
                 arr.append(user)
-
             return (arr, 200, None)
 
     def delete(self):
+
+        #delete user with all created trips
         email_json = request.args.get('email')
-
         if self.is_user_exist(email_json) is True:
-            user_dict = app.db.users.find_one({'email':email_json})
-            app.db.users.delete_one(user_dict)
-            return ({'delete':'the user '+ email_json+ ' as been deleted'}, 200, None)
-        else:
 
-            print ('user does not exist')
+            #get the user dictionary
+            user_dict = app.db.users.find_one({'email':email_json})
+
+            #check if user own trips and delete them
+            user_trip = app.db.trips.find({'user_id':user_dict['_id']})
+            if user_trip is not None:
+                app.db.trips.delte({'user_id':user_dict['_id']})
+
+            #delete user and return appropiete message
+            app.db.users.delete({'email':email_json})
+            return ({'delete':' user deleted and all posts if he had one or multiple'},200,None)
+
+        else:
             return ({'error': 'User with email ' + email_json + " does not exist"}, 404, None)
 
     def patch(self):
-        user_email = request.arg.get('email')
-        user_json = request.json
-        if user_email is None:
-            return ({'error': 'user not found'}, 404, None)
 
+        #patching user get only one args, email
+        
+        email = request.arg.get('email')
+        email_json = request.json.get('email')
+        first_name = request.json.get('first_name')
+        last_name = request.json.get('last_name')
+        username = request.json.get('username')
+        trips_id = request.json.get('trips_id')
         user_collect = app.db.users
-        user_dict = user_collect.find_one({'email': user_email})
 
-        if 'first_name' in user_json is not None:
-            user_dict['first_name'] = user_json['first_name']
-        elif user_json['email'] is not None:
-            user_dict['email'] = user_json['email']
-        elif user_json['last_name'] is not None:
-            user_dict['last_name'] = user_json['last_name']
-        elif user_json['user_name'] is not None:
-            user_dict['username'] = user_json['username']
-        elif user_json['password'] is not None:
-            user_dict['password'] = user_json['password']
-        else:
-            return ({'error': 'no argument was passed to be save'}, 404, None)
+        #update email
+    if email is not None:
+        if email_json is not None:
+            user_collect.update({'email':email_json})
+            return(user_collect,200,None)
+        #update first name
+        elif first_name is not None:
+            user_collect.update({'first_name':first_name})
+            return(user_collect,200,None)
+        #update last name
+        elif last_name is not None:
+            user_collect.update({'last_name':last_name})
+            return(user_collect,200,None)
+        #update username
+        elif username is not None:
+            user_collect.update({'username':username})
+            return(user_collect,200,None)
+        #update_trip
+        elif trips_id is not None:
+            user_collect.update({'first_name':trips_id})
+            return(user_collect,200,None)
 
-        user_collect.save(user_dict)
-        return (user_dict, 200, None)
+    else:
+        return ({'error':'there is not'+ email+'stored in the database'},404, None)
+
+
+
+
+
+
+
+
 
     def put(self):
 
@@ -223,7 +273,7 @@ class User(Resource):
         if user_dict is None:
             return False
         else:
-            print('User exist already')
+
             return True
 
 

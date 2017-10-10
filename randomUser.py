@@ -53,8 +53,6 @@ class create_trip(object):
             i = i+1
         stop_point = []
         destination = coutry_arr[dest_index]
-        print(destination)
-
         if destination == 'france':
             i = 0
             while i<5:
@@ -92,7 +90,7 @@ class create_trip(object):
         trip.name = trip_name
         trip.stop_point = stop_point
         trip.start_date = str(datetime.date.today())
-
+        #print(trip.trip_id)
         return trip
 
             # print (trip.name)
@@ -100,3 +98,6 @@ class create_trip(object):
             # print(trip.stop_point)
             # print(trip.start_date)
             # print(trip.completed)
+# if __name__=='__main__':
+#     trip = create_trip()
+#     trip.create()

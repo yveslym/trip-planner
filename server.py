@@ -53,29 +53,22 @@ class Trip(Resource):
         name = request.json('name')
         destination = request.json('destination')
         user = request.jason('user')
+        completed = request.jason('completed')
+        start_date = request.json('start_date')
 
-        if name is None or destination is None or user is None:
-            return({'error':'both name and destion are required to create a post'},400,None)
+        if name is None:
+            return({'error':' trip name field is missing'},400,None)
+        elif destination is None:
+            return({'error':'trip destination field is missing'},400,None)
+        elif user is None:
+            return({'error':' user trip field is missing'},400,None)
+        elif completed is None:
+            return({'error':' trip status trip field is missing'},400,None)
+        elif start_date is None:
+            return({'error':' trip starting date field is missing'},400,None)
         else:
-            self.name = name
-            self.destination = destination
-            self.user = user
-            self.completed = False
-
-        if trip_json['stop_point'] is not None:
-            self.stop_point = trip_json('stop_point')
-
-        if trip_json['start_date'] is not None:
-            self.start_date = trip_json['start_date']
-
-        trip_dict = {self.name,
-                     self.destination,
-                     self.user,
-                     self.stop_point,
-                     self.completed,
-                     self.start_date}
-        trip_collect.insert_one(trip_dict)
-        return (trip_dict,200,None)
+            trip_collect.insert_one(trip_json)
+            return (trip_dict,200,None)
 
 
 
@@ -207,11 +200,12 @@ class User(Resource):
 ## Add api routes here
 
 api.add_resource(User, '/users')
+api.add_ressource(Trip,'/trips')
 
 
 #  Custom JSON serializer for flask_restful
 @api.representation('application/json')
-def output_json(data, code, headers=None):
+def output_json(data, code, headers = None):
     resp = make_response(JSONEncoder().encode(data), code)
     resp.headers.extend(headers or {})
     return resp

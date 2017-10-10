@@ -98,7 +98,7 @@ class TripPlannerTestCase(unittest.TestCase):
         print('______________________TESTING DELETING USER__________________')
 
         #randomly get a country
-        index = randint(0, 2)
+        index = randint(0, 3)
         arr = ['usa','canada','uk','france']
         countr = arr[index]
 
@@ -114,6 +114,7 @@ class TripPlannerTestCase(unittest.TestCase):
         user = user_array[randint(0,len(user_array) -1 )]
         mail = user['email']
 
+
         #delete user on the picked email
         print ('user to delete:', mail)
 
@@ -122,7 +123,7 @@ class TripPlannerTestCase(unittest.TestCase):
                                   )
         self.assertEqual(deleted.status_code, 200)
 
-        print('DELTETING A NONE EXISTING USER')
+        print('NOW DELTETING A NONE EXISTING USER')
 
         deleted = self.app.delete('/users',
                                   query_string=dict(email=mail)
@@ -137,4 +138,3 @@ if __name__ == '__main__':
     unittest.main()
     tripTest = TripPlannerTestCase
     #tripTest.testCreateUser()
-

@@ -220,7 +220,7 @@ class User(Resource):
     def patch(self):
 
         #patching user get only one args, email
-        
+
         email = request.arg.get('email')
         email_json = request.json.get('email')
         first_name = request.json.get('first_name')
@@ -248,7 +248,7 @@ class User(Resource):
             return(user_collect,200,None)
         #update_trip
         elif trips_id is not None:
-            user_collect.update({'first_name':trips_id})
+            user_collect.update({'trips_id':trips_id})
             return(user_collect,200,None)
 
     else:

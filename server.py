@@ -246,7 +246,7 @@ class User(Resource):
         elif username is not None:
             user_collect.update({'username':username})
             return(user_collect,200,None)
-        #update_trip
+        #update_trip--
         elif trips_id is not None:
             user_collect.update({'trips_id':trips_id})
             return(user_collect,200,None)

@@ -223,7 +223,7 @@ class User(Resource):
 
         #patching user get only one args, email
 
-        email = request.arg.get('email')
+        email = request.args.get('email')
         email_json = request.json.get('email')
         first_name = request.json.get('first_name')
         last_name = request.json.get('last_name')
@@ -235,7 +235,11 @@ class User(Resource):
         if email is not None:
             if email_json is not None:
                 user_collect.update({'email':email_json})
+<<<<<<< HEAD
                 return(user_collect,200,None)
+=======
+                return (user_collect,200,None)
+>>>>>>> e0ef13aba2c8228ab1dd201fac4b88cefcd49586
             #update first name
             elif first_name is not None:
                 user_collect.update({'first_name':first_name})
@@ -251,6 +255,7 @@ class User(Resource):
             #update_trip--
             elif trips_id is not None:
                 # append a new trip id when new trip create
+<<<<<<< HEAD
                 app.db.users.update({'email': email_json},
                                     {push:{'trips_id':trips_id}}
                                     )
@@ -259,6 +264,16 @@ class User(Resource):
 
         else:
             return ({'error':'there is not'+ email+'stored in the database'},404, None)
+=======
+                user_col = app.db.users.update({'email': email_json},
+                                    {push:{'trips_id':trips_id}}
+                                    )
+
+                return(user_col,201,None)
+
+        else:
+            return ({'error':'the email is not stored in the database'},404, None)
+>>>>>>> e0ef13aba2c8228ab1dd201fac4b88cefcd49586
 
 
 

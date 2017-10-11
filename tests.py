@@ -9,6 +9,7 @@ from pymongo import MongoClient
 from random import  randint
 from randomUser import create_trip
 from randomUser import Create_user
+import pdb
 
 
 class TripPlannerTestCase(unittest.TestCase):
@@ -169,8 +170,8 @@ class TripPlannerTestCase(unittest.TestCase):
         deleted = self.app.delete('/users',
                                   query_string=dict(email=mail)
                                   )
-self.assertEqual(deleted.status_code, 404)
-self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
+        self.assertEqual(deleted.status_code, 404)
+        self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
 
 
 
@@ -179,23 +180,42 @@ self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + m
 
     def test_post_trip_with_user_id(self):
 
-        print('_____________POST TRIP WITH USER ID______________________')
-        #randomly get an array of user by country
+        print('_____________POST TRIP WITH USER ID AND PATCH USER TRIP LIST______________________')
+        # #randomly get an array of user by country
+        # index = randint(0, 3)
+        # arr = ['usa','canada','uk','france']
+        # countr = arr[index]
+        # response = self.app.get('/users',query_string=dict(country = countr))
+        # # create a new trip
+        # mytrip = create_trip()
+        # trip = mytrip.create()
+        #
+        # # randomly get a user dict from array
+        # users_list = json.loads(response.data.decode())# transform data into list
+        #
+        # ind = randint(0,len(users_list) - 1)
+        # user = users_list[ind]
+
+
+        #randomly get a user from the picked country
         index = randint(0, 3)
         arr = ['usa','canada','uk','france']
         countr = arr[index]
+
         response = self.app.get('/users',
                                 query_string=dict(country = countr)
                                 )
-        # create a new trip
-        mytrip = create_trip()
-        trip = mytrip.create()
 
-        # randomly get a user dict from array
-        users_list = json.loads(response.data.decode())# transform data into list
-        ind = randint(0,len(users_list) - 1)
-        user = users_list[ind]
+        response_json = json.loads(response.data.decode())
 
+        print(type(response.data))
+
+        print(type(response_json))
+        user_array = []
+        for user in response_json:
+            user_array.append(user)
+        user = user_array[randint(0,len(user_array) -1 )]
+        mail = user['email']
         #insert
 
         trip.user_id = user['_id']
@@ -217,33 +237,46 @@ self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + m
         print(post)
         self.assertEqual(post.status_code, 200)
 
-    def test_trip_post(self):
-
-
-        print('______________________TESTING POST TRIP__________________')
-
-        mytrip = create_trip()
-        trip = mytrip.create()
-
-        post = self.app.post('/trips',
-                      headers = None,
-                      data = json.dumps(dict(name = trip.name,
-                                             destination = trip.destination,
-                                             stop_point = trip.stop_point,
-                                             start_date = trip.start_date,
-                                             completed = trip.completed)),
-                      content_type = 'application/json')
-        print('post trip response:')
-        print(post)
-        self.assertEqual(post.status_code, 200)
-
         patch_user_trip_id = self.app.patch('/users',
                                             headers = None,
                                             data=json.dumps(dict(trips_id = trip.trip_id)),
+                                            query_string=dict(email= email),
                                             content_type = 'application/json')
         print('patch trip id trip response:')
         print(patch_user_trip_id)
         self.assertEqual(patch_user_trip_id.status_code, 201)
+
+
+
+    # def test_trip_post(self):
+    #     print('______________________TESTING POST TRIP AND UPDATE USER LIST OF TRIPS__________________')
+    #
+    #
+    #     index = randint(0, 3)
+    #     arr = ['usa','canada','uk','france']
+    #     countr = arr[index]
+    #     response = self.app.get('/users',query_string=dict(country = countr))
+    #
+    #     # randomly get a user dict from array
+    #     users_list = json.loads(response.data.decode())
+    #     ind = randint(0,len(users_list) - 1)
+    #     email = users_list[ind]['email']
+    #
+    #     mytrip = create_trip()
+    #     trip = mytrip.create()
+    #
+    #     post = self.app.post('/trips',
+    #                   headers = None,
+    #                   data = json.dumps(dict(name = trip.name,
+    #                                          destination = trip.destination,
+    #                                          stop_point = trip.stop_point,
+    #                                          start_date = trip.start_date,
+    #                                          completed = trip.completed,
+    #                                          trip_id = trip.trip_id)),
+    #                   content_type = 'application/json')
+    #     print('post trip response:')
+    #     print(post)
+    #     self.assertEqual(post.status_code, 200)
 
     def test_trip_post_missing_field(self):
 

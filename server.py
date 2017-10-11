@@ -251,11 +251,11 @@ class User(Resource):
         #update_trip--
         elif trips_id is not None:
             # append a new trip id when new trip create
-            app.db.users.update({'email': email_json},
+            user_col = app.db.users.update({'email': email_json},
                                 {$push:{'trips_id':trips_id}}
                                 )
 
-            return(user_collect,200,None)
+            return(user_col,201,None)
 
     else:
         return ({'error':'there is not'+ email+'stored in the database'},404, None)

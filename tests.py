@@ -44,7 +44,8 @@ class TripPlannerTestCase(unittest.TestCase):
                                                         email = user.email,
                                                         password = "",
                                                         country = user.country,
-                                                        username = user.username)),
+                                                        username = user.username,
+                                                        trips_id = user.trips_id)),
                                  content_type = 'application/json')
         print('post new user response:')
         print(response)
@@ -75,14 +76,27 @@ class TripPlannerTestCase(unittest.TestCase):
         #expect to get an error, with message user exist
         print('______________________TESTING POST EXISTING USER__________________')
 
+        # get an existing user
+        #randomly get a country
+        index = randint(0, 3)
+        arr = ['usa','canada','uk','france']
+        countr = arr[index]
+
+        get = self.app.get('/users',
+                                query_string=dict(country = countr)
+                                )
+        user_list = json.loads(get.data.decode())
+        ind = randint(0,len(users_list) - 1)
+        user = users_list[ind]
+
         post = self.app.post('/users',
                                  headers = None,
                                  data = json.dumps(dict(
-                                     first_name = 'Salma',
-                                     last_name = 'Janessa',
-                                     email = 'Salma.Janessa@aol.com',
-                                     country = 'canada',
-                                     username = 'SalmaJanesa'
+                                     first_name = user.first_name,
+                                     last_name = user.last_name,
+                                     email = user.emai,
+                                     country = user.country,
+                                     username = user.username
 
                                  )),
                                  content_type = 'application/json')
@@ -91,11 +105,13 @@ class TripPlannerTestCase(unittest.TestCase):
         self.assertEqual(post.status_code, 400)
 
     def test_get_user(self):
+        print('______________________TESTING GET USER__________________')
+
         #randomly get a country
         index = randint(0, 3)
         arr = ['usa','canada','uk','france']
         countr = arr[index]
-        print('______________________TESTING GET USER__________________')
+
         response = self.app.get('/users',
                                 query_string=dict(country = countr)
                                 )
@@ -217,10 +233,17 @@ self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + m
                                              start_date = trip.start_date,
                                              completed = trip.completed)),
                       content_type = 'application/json')
-
         print('post trip response:')
         print(post)
         self.assertEqual(post.status_code, 200)
+
+        patch_user_trip_id = self.app.patch('/users',
+                                            headers = None,
+                                            data=json.dumps(dict(trips_id = trip.trip_id)),
+                                            content_type = 'application/json')
+        print('patch trip id trip response:')
+        print(patch_user_trip_id)
+        self.assertEqual(patch_user_trip_id.status_code, 201)
 
     def test_trip_post_missing_field(self):
 

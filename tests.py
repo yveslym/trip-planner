@@ -153,8 +153,8 @@ class TripPlannerTestCase(unittest.TestCase):
         deleted = self.app.delete('/users',
                                   query_string=dict(email=mail)
                                   )
-self.assertEqual(deleted.status_code, 404)
-self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
+        self.assertEqual(deleted.status_code, 404)
+        self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
 
 
 

@@ -232,33 +232,33 @@ class User(Resource):
         user_collect = app.db.users
 
         #update email
-    if email is not None:
-        if email_json is not None:
-            user_collect.update({'email':email_json})
-            return(user_collect,200,None)
-        #update first name
-        elif first_name is not None:
-            user_collect.update({'first_name':first_name})
-            return(user_collect,200,None)
-        #update last name
-        elif last_name is not None:
-            user_collect.update({'last_name':last_name})
-            return(user_collect,200,None)
-        #update username
-        elif username is not None:
-            user_collect.update({'username':username})
-            return(user_collect,200,None)
-        #update_trip--
-        elif trips_id is not None:
-            # append a new trip id when new trip create
-            app.db.users.update({'email': email_json},
-                                {$push:{'trips_id':trips_id}}
-                                )
+        if email is not None:
+            if email_json is not None:
+                user_collect.update({'email':email_json})
+                return(user_collect,200,None)
+            #update first name
+            elif first_name is not None:
+                user_collect.update({'first_name':first_name})
+                return(user_collect,200,None)
+            #update last name
+            elif last_name is not None:
+                user_collect.update({'last_name':last_name})
+                return(user_collect,200,None)
+            #update username
+            elif username is not None:
+                user_collect.update({'username':username})
+                return(user_collect,200,None)
+            #update_trip--
+            elif trips_id is not None:
+                # append a new trip id when new trip create
+                app.db.users.update({'email': email_json},
+                                    {push:{'trips_id':trips_id}}
+                                    )
 
-            return(user_collect,200,None)
+                return(user_collect,200,None)
 
-    else:
-        return ({'error':'there is not'+ email+'stored in the database'},404, None)
+        else:
+            return ({'error':'there is not'+ email+'stored in the database'},404, None)
 
 
 

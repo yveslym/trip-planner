@@ -250,7 +250,11 @@ class User(Resource):
             return(user_collect,200,None)
         #update_trip--
         elif trips_id is not None:
-            user_collect.update({'trips_id':trips_id})
+            # append a new trip id when new trip create
+            app.db.users.update({'email': email_json},
+                                {$push:{'trips_id':trips_id}}
+                                )
+
             return(user_collect,200,None)
 
     else:

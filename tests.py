@@ -222,7 +222,7 @@ class TripPlannerTestCase(unittest.TestCase):
 
     def test_get_trip_with_user_id(self):
 
-        print('______________________TESTING GET TRIP BY USER ID AND GET WRONG USER ID__________________')
+        print('______________________TESTING GET TRIP BY USER ID__________________')
 
         user_id = '59dcff382ef5263329e934e3'
 
@@ -233,12 +233,45 @@ class TripPlannerTestCase(unittest.TestCase):
 
         self.assertEqual(get.status_code,200)
 
-        user_id = '59dcff382ef52633'
+    def test_get_trip_with_wrong_user_id(self):
 
-        get = self.app.get('/trips', query_string = dict(user_id = user_id))
+        print('______________________TESTING GET GET TRIP WITH WRONG ID__________________')
+
+        user_id = '0000000000000000000000000000'
+        wrong = self.app.get('/trips', query_string = dict(user_id = user_id))
 
         print('get request trip with wrong id answer:')
-        print(get)
+        print(wrong)
+        self.assertEqual(wrong.status_code,400)
+
+
+    # def test_patch_user(self):
+    #
+    #     index = randint(0, 3)
+    #     arr = ['usa','canada','uk','france']
+    #     countr = arr[index]
+    #     response = self.app.get('/users',query_string=dict(country = countr))
+    #     # create a new trip
+    #     mytrip = create_trip()
+    #     trip = mytrip.create()
+    #
+    #     # randomly get a user dict from array
+    #     users_list = json.loads(response.data.decode())# transform data into list
+    #     ind = randint(0,len(users_list) - 1)
+    #     user = users_list[ind]
+    #
+    #     Users = Create_user()
+    #     newu = Users.create()
+    #
+    #
+    #     patch = self.app.patch('/user',headers = None,
+    #                            data = json.dumps(dict( first_name = newu.first_name,
+    #                                                   last_name = newu.last_name,
+    #                                                   email = newu.email)),
+    #                            query_string=dict(email = user['email']),
+    #                            content_json ='application/json')
+    #     self.assertEqual(patch.status_code,200)
+
 
 
 

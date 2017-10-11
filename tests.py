@@ -2,13 +2,13 @@ import server
 from server import *
 import unittest
 import json
-from pprint import pprint
 import bcrypt
 import base64
 from pymongo import MongoClient
 from random import  randint
-from randomUser import create_trip
 from randomUser import Create_user
+from randomUser import create_trip
+import pdb
 
 
 class TripPlannerTestCase(unittest.TestCase):
@@ -33,7 +33,7 @@ class TripPlannerTestCase(unittest.TestCase):
 
 
     def test_post_user(self):
-        print('______________________TESTING POST USER__________________')
+        print('______________________TESTING INSERT USER__________________')
         new_user = Create_user()
         user = new_user.create()
 
@@ -75,39 +75,51 @@ class TripPlannerTestCase(unittest.TestCase):
         #expect to get an error, with message user exist
         print('______________________TESTING POST EXISTING USER__________________')
 
-        post = self.app.post('/users',
-                                 headers = None,
-                                 data = json.dumps(dict(
-                                     first_name = 'Salma',
-                                     last_name = 'Janessa',
-                                     email = 'Salma.Janessa@aol.com',
-                                     country = 'canada',
-                                     username = 'SalmaJanesa'
-
-                                 )),
-                                 content_type = 'application/json')
-        print('post with existing user reponse:')
-        print(post)
-        self.assertEqual(post.status_code, 400)
-
-    def test_get_user(self):
         #randomly get a country
         index = randint(0, 3)
         arr = ['usa','canada','uk','france']
         countr = arr[index]
-        print('______________________TESTING GET USER__________________')
+
+        #randomly get a user from the picked country
         response = self.app.get('/users',
-                                query_string=dict(country = countr)
-                                )
+                                query_string=dict(country=countr))
+        response_json = json.loads(response.data.decode())
+
+        user_array = []
+        for user in response_json:
+            user_array.append(user)
+
+        user = user_array[randint(0,len(user_array) -1 )]
+        mail = user['email']
+
+
+        post = self.app.post('/users',
+                                headers = None,
+                                data = json.dumps(dict(first_name = user['first_name'],
+                                                       last_name = user['last_name'],
+                                                       email = user['email'],
+                                                       password = "",
+                                                       country = user['country'],
+                                                       username = user['username'])),
+                                content_type = 'application/json')
+        print('post with existing user reponse:')
+        print(post)
+        self.assertEqual(post.status_code, 400)
+
+
+
+    def test_get_user(self):
+        print('______________________TESTING GET USER__________________')
+        response = self.app.get('/users',query_string=dict(country = 'usa'))
 
         print('get user response:')
         print(response)
-        response_json = json.loads(response.data.decode())
+        #response_json = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
 
     def test_delete_user(self):
-        print('______________________TESTING DELETING USER__________________')
+        print('______________________TESTING DELETING EXISTING AND NONE EXISTING__________________')
 
         #randomly get a country
         index = randint(0, 3)
@@ -118,48 +130,37 @@ class TripPlannerTestCase(unittest.TestCase):
         response = self.app.get('/users',
                                 query_string=dict(country=countr))
         response_json = json.loads(response.data.decode())
+
         user_array = []
         for user in response_json:
             user_array.append(user)
+
         user = user_array[randint(0,len(user_array) -1 )]
         mail = user['email']
 
-
         #delete user on the picked email
+
+
+        deleted = self.app.delete('/users',query_string = dict(email = mail))
+
         print ('user to delete:', mail)
-
-        deleted = self.app.delete('/users',
-                                  query_string = dict(email = mail)
-                                  )
-        self.assertEqual(deleted.status_code, 200)
-
         print('delete user response:')
         print(deleted)
+        self.assertEqual(deleted.status_code, 200)
 
-        deleted = self.app.delete('/users',
-                                  query_string=dict(email=mail)
-                                  )
 
-        print('delte non existing user response:')
+
+        deleted = self.app.delete('/users', query_string=dict(email=mail))
+
+        print('DELTETING A NONE EXISTING USER')
+        print ('user to delete:', mail)
+        print('delete user response:')
         print(deleted)
         self.assertEqual(deleted.status_code, 404)
         self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
 
 
-    def test_delete_user_with_all_rips(self):
-
-        #find trips by user id
-
-        deleted = self.app.delete('/users',
-                                  query_string=dict(email=mail)
-                                  )
-        self.assertEqual(deleted.status_code, 404)
-        self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
-
-
-
-
-
+        #----------------------------------------------------------------------------------#
 
     def test_post_trip_with_user_id(self):
 
@@ -168,9 +169,7 @@ class TripPlannerTestCase(unittest.TestCase):
         index = randint(0, 3)
         arr = ['usa','canada','uk','france']
         countr = arr[index]
-        response = self.app.get('/users',
-                                query_string=dict(country = countr)
-                                )
+        response = self.app.get('/users',query_string=dict(country = countr))
         # create a new trip
         mytrip = create_trip()
         trip = mytrip.create()
@@ -199,27 +198,7 @@ class TripPlannerTestCase(unittest.TestCase):
                       content_type = 'application/json')
         print('post trip with user id response:')
         print(post)
-        self.assertEqual(post.status_code, 200)
-
-    def test_trip_post(self):
-
-
-        print('______________________TESTING POST TRIP__________________')
-
-        mytrip = create_trip()
-        trip = mytrip.create()
-
-        post = self.app.post('/trips',
-                      headers = None,
-                      data = json.dumps(dict(name = trip.name,
-                                             destination = trip.destination,
-                                             stop_point = trip.stop_point,
-                                             start_date = trip.start_date,
-                                             completed = trip.completed)),
-                      content_type = 'application/json')
-
-        print('post trip response:')
-        print(post)
+        #pdb.set_trace()
         self.assertEqual(post.status_code, 200)
 
     def test_trip_post_missing_field(self):
@@ -240,6 +219,31 @@ class TripPlannerTestCase(unittest.TestCase):
         print('post request with missing field:')
         print(post)
         self.assertEqual(post.status_code, 400)
+
+    def test_get_trip_with_user_id(self):
+
+        print('______________________TESTING GET TRIP BY USER ID AND GET WRONG USER ID__________________')
+
+        user_id = '59dcff382ef5263329e934e3'
+
+        get = self.app.get('/trips', query_string = dict(user_id = user_id))
+
+        print('get request answer:')
+        print(get)
+
+        self.assertEqual(get.status_code,200)
+
+        user_id = '59dcff382ef52633'
+
+        get = self.app.get('/trips', query_string = dict(user_id = user_id))
+
+        print('get request trip with wrong id answer:')
+        print(get)
+
+
+
+
+
 
 
 if __name__ == '__main__':

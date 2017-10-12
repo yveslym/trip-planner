@@ -91,12 +91,19 @@ class User(Resource):
     def post(self):
         user_json = request.json
         user_collect = app.db.users
-        # user_fname = request.json.get('first_name')
-        user_email = request.json.get('email')
 
+
+        user_email = request.json.get('email')
+        password = request.json.get('password')
+
+        #pdb.set_trace()
 
         if 'first_name' in user_json and 'last_name' in user_json and 'email' in user_json:
 
+            # encrypt the password
+            encoded_password = password.encode('utf-8')
+            hashed = bcrypt.hashpw(encoded_password, bcrypt.gensalt(rounds=12))
+            user_json['password'] = str(hashed)
             if self.is_user_exist(user_email) is False:
                 user_collect = app.db.users
                 user_collect.insert_one(user_json)
@@ -115,30 +122,13 @@ class User(Resource):
 
     def get(self):
 
-        # user_email = request.args.get('email')
+
+        user_email = request.args.get('email')
+
         user_country = request.args.get('country')
-        # print(user_email)
-        # if user_email is None:
-        #     return ({'error': 'no email argument was passed'}, 404, None)
-        #
-        # user_collect = app.db.users
-        #
-        # user_dict = user_collect.find_one({'email': user_email})
-        # print(user_dict)
-        # if user_dict is None:
-        #     return ({'error': 'user does not exist'}, 404, None)
-        # else:
-        #     # arr = []
-        #     # for user in user_dict:
-        #     #     arr.append(user)
-        #
-        #     return (user_dict, 200, None)
 
-        #country argument get multy user.
-
-        if user_country is None:
-            return ({'error': 'no country argument was passed'}, 404, None)
-        user_dict = app.db.users.find({'country':user_country})
+        if user_country is not None:
+            user_dict = app.db.users.find({'country':user_country})
         if user_dict is None:
             return ({'error': 'user does not exist'}, 404, None)
         else:

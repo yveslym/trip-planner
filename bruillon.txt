@@ -1,0 +1,16 @@
+user_email = request.args.get('email')
+user_password = request.args.get('password')
+user_country = request.args.get('country')
+
+if user_email is not None and user_password is not None:
+    user_collect = app.db.users.find_one({'email': user_email})
+    if user_collect is not None:
+        if bcrypt.hashpw(user_password,user_collect['password']) == user_collect['password']:
+            user_collect['password'] = ''
+            return(user_collect,200,None)
+        else:
+            return({'error':'credential does not match'},401,None)
+    else:
+        return({'error':'could not find user'},400,None)
+# else:
+#     return({'error':'both email and password needed to login'},400)

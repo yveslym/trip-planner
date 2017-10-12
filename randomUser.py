@@ -35,7 +35,7 @@ class Create_user(object):
         user.last_name = lname
         user.email = mail
         user.country = country
-        user.password = lname+fname
+        user.password = '123456'
         user.username = uname
         return(user)
 

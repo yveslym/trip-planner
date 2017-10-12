@@ -11,7 +11,7 @@ import uuid
 app = Flask(__name__)
 mongo = MongoClient('localhost', 27017)
 app.db = mongo.trip_planner_test
-app.bcrypt_rounds = 12
+rounds = app.bcrypt_rounds = 12
 api = Api(app)
 
 
@@ -46,25 +46,41 @@ class Trip(Resource):
 
     def get(self):
 
-        #get trip with user id
 
         user_id = request.args.get('user_id')
 
         if user_id is not None:
             trip_dict = app.db.trips.find({'user_id':user_id})
-            #pdb.set_trace()
-            arr = []
-            for trip in trip_dict:
-                arr.append(trip)
-            #pdb.set_trace()
-            if arr == []:
 
-                return({'error':' No trip found on the user id argument given'},400,None)
-            else:
+
+            if trip_dict is not None:
+                arr = []
+                for trip in trip_dict:
+                    arr.append(trip)
+
                 return(arr,200,None)
+            else:
+                return({'error':' No trip found the user and trip name argument given'},400,None)
+        #check if there's trip with current user Reference
+        # elif request.args.get('user_id') is not None:
+        #
+        #     trip_dict = app.db.trips
+        #
+        #     trip_dict.find_one({'user_id':request.args.get('user_id')})
+        #
+        #     # if trip_dict is not None:
+        #     #     arr = []
+        #     #     for trip in trip_dict:
+        #     #         arr.append(trip)
+        #     return(trip_dict,200,None)
 
-        else:
-            return({'error':' no argument passed'},400,None)
+        # else:
+        #     return({'error':' No trip found for the current user'},400,None)
+
+
+        # else:
+        #     return({'error':' No argument have been passed, enter either user reference or user reference and trip name'},400,None)
+
 
     def delete(self):
 
@@ -102,11 +118,12 @@ class User(Resource):
 
             # encrypt the password
             encoded_password = password.encode('utf-8')
-            hashed = bcrypt.hashpw(encoded_password, bcrypt.gensalt(rounds=12))
-            user_json['password'] = str(hashed)
+            hashed = bcrypt.hashpw(encoded_password, bcrypt.gensalt(rounds))
+            user_json['password'] = hashed
             if self.is_user_exist(user_email) is False:
                 user_collect = app.db.users
                 user_collect.insert_one(user_json)
+                user_json['password'] = ''
                 return (user_json, 201, None)
             else:
                 return ({'error': 'user exist already'}, 400, None)
@@ -122,18 +139,38 @@ class User(Resource):
 
     def get(self):
 
-
         user_email = request.args.get('email')
-
+        user_password = request.args.get('password')
         user_country = request.args.get('country')
 
-        if user_country is not None:
-            user_dict = app.db.users.find({'country':user_country})
+
+        if user_email is not None and user_password is not None:
+
+            user_col = app.db.users
+            user = user_col.find_one({'email':user_email})
+
+            if user is not None:
+                #check password
+
+                #pdb.set_trace()
+                password_encoded = user_password.encode('utf-8')
+                if bcrypt.hashpw(password_encoded,user['password']) == user['password']:
+                    user.pop('password')
+                    return (user,200,None)
+                else:
+                    return ({'error': 'email or password is not correct'}, 401, None)
+            else:
+                return ({'error': 'enter email and password'}, 400, None)
+
+        if user_country is None:
+            return ({'error': 'no country argument was passed'}, 404, None)
+        user_dict = app.db.users.find({'country':user_country})
         if user_dict is None:
             return ({'error': 'user does not exist'}, 404, None)
         else:
             arr = []
             for user in user_dict:
+                user.pop('password')
                 arr.append(user)
 
             return (arr, 200, None)
@@ -150,46 +187,30 @@ class User(Resource):
 
             return ({'error': 'User with email ' + email_json + " does not exist"}, 404, None)
 
-    def patch(self):
-
-        #patching user get only one args, email
-
-        email = request.arg.get('email')
-        email_json = request.json.get('email')
-        first_name = request.json.get('first_name')
-        last_name = request.json.get('last_name')
-        username = request.json.get('username')
-        trips_id = request.json.get('trips_id')
-        user_collect = app.db.users
-
-        #update email
-        if email is not None:
-            if email_json is not None:
-                user_collect.update({'email':email_json})
-                return(user_collect,200,None)
-            #update first name
-            elif first_name is not None:
-                user_collect.update({'first_name':first_name})
-                return(user_collect,200,None)
-            #update last name
-            elif last_name is not None:
-                user_collect.update({'last_name':last_name})
-                return(user_collect,200,None)
-            #update username
-            elif username is not None:
-                user_collect.update({'username':username})
-                return(user_collect,200,None)
-            #update_trip--
-            elif trips_id is not None:
-                # append a new trip id when new trip create
-                app.db.users.update({'email': email_json},
-                                    {push:{'trips_id':trips_id}}
-                                    )
-
-                return(user_collect,200,None)
-
-        else:
-            return ({'error':'there is not'+ email+'stored in the database'},404, None)
+    # def patch(self):
+    #     user_email = request.arg.get('email')
+    #     user_json = request.json
+    #     if user_email is None:
+    #         return ({'error': 'user not found'}, 404, None)
+    #
+    #     user_collect = app.db.users
+    #     user_dict = user_collect.find_one({'email': user_email})
+    #
+    #     if 'first_name' in user_json is not None:
+    #         user_dict['first_name'] = user_json['first_name']
+    #     elif user_json['email'] is not None:
+    #         user_dict['email'] = user_json['email']
+    #     elif user_json['last_name'] is not None:
+    #         user_dict['last_name'] = user_json['last_name']
+    #     elif user_json['user_name'] is not None:
+    #         user_dict['username'] = user_json['username']
+    #     elif user_json['password'] is not None:
+    #         user_dict['password'] = user_json['password']
+    #     else:
+    #         return ({'error': 'no argument was passed to be save'}, 404, None)
+    #
+    #     user_collect.save(user_dict)
+    #     return (user_dict, 200, None)
 
     def put(self):
 

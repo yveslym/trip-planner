@@ -7,6 +7,10 @@ import bcrypt
 from mongoengine import *
 import pdb
 import uuid
+from socket import *
+
+sock=socket()
+sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 
 app = Flask(__name__)
 mongo = MongoClient('localhost', 27017)
@@ -123,6 +127,7 @@ class User(Resource):
             if self.is_user_exist(user_email) is False:
                 user_collect = app.db.users
                 user_collect.insert_one(user_json)
+                user_json['password'] = ''
                 user_json.pop('password')
                 return (user_json, 201, None)
             else:

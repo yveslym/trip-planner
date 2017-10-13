@@ -20,6 +20,12 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    @IBAction func addUser(_ sender: Any) {
+        
+        let user = UserData(firstName:"yvesl", lastName:  "songolo", email:  "yves2300@mail.com", password: "123456")
+        
+        Network.create_user(users: user)
+    }
+    
 }
 

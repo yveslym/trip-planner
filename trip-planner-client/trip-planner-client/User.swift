@@ -8,33 +8,67 @@
 
 import Foundation
 
-class User{
+struct UserData: Codable {
+    var firstName: String
+    var lastName: String
+    var email: String
+    var password:String
     
-    let first_name: String
-    let last_name: String
-    let email: String
-    var trips : [Trip]
+    enum userKey:String,CodingKey{
+        case first_name
+        case last_name
+        case email
+        case password
+    }
     
-    init (fname:String,lname:String,email:String,trips:[Trip]){
-        self.first_name = fname
-        self.last_name = lname
-        self.email = email
-        self.trips = trips
+}
+
+extension UserData {
+    init(from decoder: Decoder) throws {
+        let contenaire = try decoder.container(keyedBy: userKey.self)
+        email = (try contenaire.decodeIfPresent(String.self, forKey: .email))!
+        firstName = (try contenaire.decodeIfPresent(String.self, forKey: .first_name))!
+        lastName = (try contenaire.decodeIfPresent(String.self, forKey: .last_name))!
+        password = ""
+        
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var contenaire = encoder.container(keyedBy: userKey.self)
+        try contenaire.encode(firstName, forKey: .first_name)
+        try contenaire.encode(lastName, forKey: .last_name)
+        try contenaire.encode(email, forKey: .email)
+        try contenaire.encode(password, forKey: .password)
     }
 }
 
-class Trip{
+
+
+
+
+
+struct Trip_Data: Codable{
     let name : String
     let destination : String
-    let stop_point : [String]
+    let stopPoint : [String]
     let status: Bool
     
-    init(name:String,destination:String,status:Bool,s_point:[String]){
-        self.destination = destination
-        self.name = name
-        self.status = status
-        self.stop_point = s_point
+    enum tripKey: String,CodingKey {
+        case name
+        case destination
+        case stop_point
+        case status
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 

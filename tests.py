@@ -12,6 +12,15 @@ import pdb
 
 
 class TripPlannerTestCase(unittest.TestCase):
+
+    # def generateBasicAuthHeader(username, password):
+    #     concatString = username + ":" + password
+    #     utf8 = concatString.encode('utf-8')
+    #     base64String =  base64.b64encode(utf8)
+    #     finalString = "Basic " + base64String
+    #
+    #     return finalString
+
     def setUp(self):
 
       self.app = server.app.test_client()
@@ -36,6 +45,7 @@ class TripPlannerTestCase(unittest.TestCase):
         print('______________________TESTING INSERT USER__________________')
         new_user = Create_user()
         user = new_user.create()
+        #pdb.set_trace()
 
         response = self.app.post('/users',
                                  headers = None,
@@ -95,12 +105,12 @@ class TripPlannerTestCase(unittest.TestCase):
 
         post = self.app.post('/users',
                                 headers = None,
-                                data = json.dumps(dict(first_name = user['first_name'],
-                                                       last_name = user['last_name'],
-                                                       email = user['email'],
-                                                       password = "",
-                                                       country = user['country'],
-                                                       username = user['username'])),
+                                data = json.dumps(dict(first_name = 'Jacquelyn',
+                                                       last_name = 'Rivera',
+                                                       email = 'Jacquelyn.Rivera@yahoo.com',
+                                                       password = '123456',
+                                                       country = 'usa',
+                                                       username = 'JacquelynRivera')),
                                 content_type = 'application/json')
         print('post with existing user reponse:')
         print(post)
@@ -110,7 +120,11 @@ class TripPlannerTestCase(unittest.TestCase):
 
     def test_get_user(self):
         print('______________________TESTING GET USER__________________')
-        response = self.app.get('/users',query_string=dict(country = 'usa'))
+        response = self.app.get(
+            '/users',
+            query_string=dict(country = 'usa')
+            #headers=dict(generateAuthHeader("some@email.com", "password"))
+            )
 
         print('get user response:')
         print(response)
@@ -242,7 +256,7 @@ class TripPlannerTestCase(unittest.TestCase):
 
     def test_get_user_with_email_password(self):
         print('______________________TESTING GET USER WITH EMAIL AND PASSWORD AUTH__________________')
-        get_user = self.app.get('/users',query_string = dict(email = 'Gardner.Brice@outlook.com',
+        get_user = self.app.get('/users',query_string = dict(email = 'Powell.Maximo@yahoo.com',
                                                              password = '123456'))
         print ('get user with email and password response:')
         print (get_user)

@@ -21,6 +21,23 @@ api = Api(app)
 
 ## Write Resources here
 
+def user_auth(func):
+    def wrapper(*args,**kwargs):
+        auth = request.authorization
+        if auth.username is not None and auth.password is not None:
+            user_col = app.db.users
+            user = user_col.find_one({'email':auth.username})
+            if user is not None:
+                encoded_pw = auth.password.encode('utf-8')
+                if bcrypt.hashpw(encoded_pw, user['password']) == user['password']:
+                    return func (*args,**kwargs)
+                else:
+                    return ({'error': 'email or password is not correct'}, 401, None)
+            else:
+                return ({'error': 'could not find user in the database'}, 400, None)
+        else:
+            return ({'error': 'enter both email and password'}, 400, None)
+    return wrapper
 
 
 
@@ -115,10 +132,23 @@ class User(Resource):
 
         user_email = request.json.get('email')
         password = request.json.get('password')
+        first_name = request.json.get('first_name')
+        last_name =request.json.get('last_name')
 
         #pdb.set_trace()
+        if user_email is None:
+            return ({'error': 'no email provided'}, 400, None)
 
-        if 'first_name' in user_json and 'last_name' in user_json and 'email' in user_json:
+        elif password is None:
+            return ({'error': 'no password provided'}, 400, None)
+
+        elif first_name is None:
+            return ({'error': 'no first name provided'}, 400, None)
+
+        elif last_name is None:
+            return ({'error': 'no last name provided'}, 400, None)
+
+        elif 'first_name' in user_json and 'last_name' in user_json and 'email' in user_json and password is not None:
             #pdb.set_trace()
             # encrypt the password
             encoded_password = password.encode('utf-8')
@@ -127,34 +157,31 @@ class User(Resource):
             if self.is_user_exist(user_email) is False:
                 user_collect = app.db.users
                 user_collect.insert_one(user_json)
-                user_json['password'] = ''
-                user_json.pop('password')
-                return (user_json, 201, None)
+                user = user_collect.fin_one({'email':user_email})
+                user.pop('password')
+                return (user, 201, None)
             else:
                 return ({'error': 'user exist already'}, 400, None)
 
-        elif 'email' in user_json is None:
-            return ({'error': 'no email provided'}, 400, None)
-        # elif 'password' in user_json is None:
-        #     return ({'error': 'Not password provided'}, 400, None)
-        elif 'first_name' in user_json is None or 'last_name' in user_json is None:
-            return ({'error': 'either first name or last name were not passed'}, 400, None)
-        # else:
-        #     return ({'error': 'there is other error'}, 400, None)
 
+
+    @user_auth
     def get(self):
-
         user_email = request.args.get('email')
         user_password = request.args.get('password')
         user_country = request.args.get('country')
-
+        auth = request.authorization
+        if auth.username is not None and auth.password is not None:
+            user_col = app.db.users
+            user = user_col.find_one({'email':auth.username})
+            user.pop('password')
+            return (user, 200, None)
 
         if user_email is not None and user_password is not None:
             user_col = app.db.users
             user = user_col.find_one({'email':user_email})
             if user is not None:
                 #check password
-
                 #pdb.set_trace()
                 password_encoded = user_password.encode('utf-8')
                 if bcrypt.hashpw(password_encoded,user['password']) == user['password']:
@@ -227,23 +254,6 @@ class User(Resource):
 
             return True
 
-def user_authen(func):
-    def wrapper(*args,**kwargs):
-        auth = request.authorization
-        if auth.email is not None and auth.password is not None:
-            user_col = app.db.users
-            user = user_col.find_one({'email':auth.email})
-            if user is not None:
-                encoded_pw = auth.password.encode('utf-8')
-                if bcrypt.hashpw(encoded_pw, user['password']) == user['password']:
-                    return func (*args,**kwargs)
-                else:
-                    return ({'error': 'email or password is not correct'}, 401, None)
-            else:
-                return ({'error': 'could not find user in the database'}, 400, None)
-        else:
-            return ({'error': 'enter both email and password'}, 400, None)
-    return wrapper
 
 ## Add api routes here
 

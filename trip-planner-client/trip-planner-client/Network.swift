@@ -58,7 +58,11 @@ class Network{
         
     }
     
-    static func fetch_user(){
+    static func fetch_user(email: String, password: String){
+        
+      let authHeaderString =  BasicAuth.generateBasicAuthHeader(username: email, password: password)
+        
+        
         
     }
     

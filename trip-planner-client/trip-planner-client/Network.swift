@@ -93,6 +93,10 @@ class Network{
         guard let url = URL(string: urlString) else {return}
         var request = URLRequest(url: url)
         
+        request.httpMethod = "DELETE"
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.addValue(authHeaderString, forHTTPHeaderField: "Authorization")
+        
     }
     
 }

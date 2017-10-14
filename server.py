@@ -9,7 +9,7 @@ import pdb
 import uuid
 from socket import *
 from basicauth import decode
-
+# from basicauth import decode import the decoder 
 sock=socket()
 sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 

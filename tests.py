@@ -145,8 +145,20 @@ class TripPlannerTestCase(unittest.TestCase):
         print('______________________TESTING DELETING EXISTING AND NONE EXISTING__________________')
 
         #randomly get a country
-        mail = "Rodgers.Maxim@yahoo.fr"
-        header_code = generateBasicAuthHeader(mail,'123456')
+        new_user = Create_user()
+        user = new_user.create()
+        #pdb.set_trace()
+
+        response = self.app.post('/users',
+                                 headers = None,
+                                 data = json.dumps(dict(first_name = user.first_name,
+                                                        last_name = user.last_name,
+                                                        email = user.email,
+                                                        password = user.password,
+                                                        country = user.country,
+                                                        username = user.username)),
+                                 content_type = 'application/json')
+        header_code = generateBasicAuthHeader(user.email,user.password)
 
         #delete user on the picked email
 
@@ -154,7 +166,7 @@ class TripPlannerTestCase(unittest.TestCase):
                                   headers = dict(authorization=header_code))
                                 #   query_string = dict(email = mail))
 
-        print ('user to delete:', mail)
+        print ('user to delete:', user.email)
         print('delete user response:')
         print(deleted)
         self.assertEqual(deleted.status_code, 200)
@@ -165,7 +177,7 @@ class TripPlannerTestCase(unittest.TestCase):
                                   headers = dict(authorization=header_code))
 
         print('DELTETING A NONE EXISTING USER')
-        print ('user to delete:', mail)
+        print ('user to delete:', user.email)
         print('delete user response:')
         print(deleted)
         self.assertEqual(deleted.status_code, 400)

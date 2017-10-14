@@ -26,6 +26,9 @@ class ViewController: UIViewController {
         
         Network.create_user(users: user)
     }
+    @IBAction func getUser(_ sender: Any) {
+        Network.fetch_user(email: "yves2300@mail.com", password: "123456")
+    }
     
 }
 

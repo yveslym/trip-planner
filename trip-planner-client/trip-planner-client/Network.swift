@@ -59,10 +59,39 @@ class Network{
     }
     
     static func fetch_user(email: String, password: String){
-        
+      
+        // get the auth header
       let authHeaderString =  BasicAuth.generateBasicAuthHeader(username: email, password: password)
         
+        let urlString = "http://127.0.0.1:5000/users"
+        guard let url = URL(string: urlString) else {return}
+        var request = URLRequest(url: url)
         
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.addValue(authHeaderString, forHTTPHeaderField: "Authorization")
+        
+        let session = URLSession.shared
+        let task = session.dataTask(with: request){(data,response,error) in
+            
+            guard let data = data else {return}
+            
+            do{
+                let user = try JSONDecoder().decode(UserData.self, from: data)
+                print (user)
+            }
+            catch{}
+        }
+        task.resume()
+    }
+    
+    static func deleteUser(email:String, password: String){
+        
+        let authHeaderString = BasicAuth.generateBasicAuthHeader(username: email, password: password)
+        
+        let urlString = "http://127.0.0.1:5000/users"
+        guard let url = URL(string: urlString) else {return}
+        var request = URLRequest(url: url)
         
     }
     

@@ -8,6 +8,7 @@ from mongoengine import *
 import pdb
 import uuid
 from socket import *
+from basicauth import decode
 
 sock=socket()
 sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
@@ -23,20 +24,39 @@ api = Api(app)
 
 def user_auth(func):
     def wrapper(*args,**kwargs):
+
         auth = request.authorization
-        if auth.username is not None and auth.password is not None:
+        #pdb.set_trace()
+        auth_code = request.headers['authorization']
+        username, password = decode(auth_code)
+
+        if auth is not None:
+            if auth.username is not None and auth.password is not None:
+                user_col = app.db.users
+                user = user_col.find_one({'email':auth.username})
+                if user is not None:
+                    encoded_pw = auth.password.encode('utf-8')
+                    if bcrypt.hashpw(encoded_pw, user['password']) == user['password']:
+                        return func (*args,**kwargs)
+                    else:
+                        return ({'error': 'email or password is not correct'}, 401, None)
+                else:
+                    return ({'error': 'could not find user in the database'}, 400, None)
+            else:
+                return ({'error': 'enter both email and password'}, 400, None)
+
+        elif username is not None and password is not None:
             user_col = app.db.users
-            user = user_col.find_one({'email':auth.username})
+            user = user_col.find_one({'email':username})
             if user is not None:
-                encoded_pw = auth.password.encode('utf-8')
+                encoded_pw = password.encode('utf-8')
                 if bcrypt.hashpw(encoded_pw, user['password']) == user['password']:
                     return func (*args,**kwargs)
                 else:
                     return ({'error': 'email or password is not correct'}, 401, None)
             else:
                 return ({'error': 'could not find user in the database'}, 400, None)
-        else:
-            return ({'error': 'enter both email and password'}, 400, None)
+
     return wrapper
 
 
@@ -157,7 +177,7 @@ class User(Resource):
             if self.is_user_exist(user_email) is False:
                 user_collect = app.db.users
                 user_collect.insert_one(user_json)
-                user = user_collect.fin_one({'email':user_email})
+                user = user_collect.find_one({'email':user_email})
                 user.pop('password')
                 return (user, 201, None)
             else:
@@ -205,8 +225,12 @@ class User(Resource):
 
             return (arr, 200, None)
 
+    @user_auth
     def delete(self):
-        email_json = request.args.get('email')
+
+        #pdb.set_trace()
+        auth = request.authorization
+        email_json = auth.username('email')
 
         if self.is_user_exist(email_json) is True:
             user_dict = app.db.users.find_one({'email':email_json})

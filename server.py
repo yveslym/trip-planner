@@ -26,26 +26,17 @@ def user_auth(func):
     def wrapper(*args,**kwargs):
 
         auth = request.authorization
+        #pdb.set_trace()
+
+        # username = auth.username
+        # password = auth.password
+
 
         auth_code = request.headers['authorization']
         username, password = decode(auth_code)
+        #pdb.set_trace()
 
-        if auth is not None:
-            if auth.username is not None and auth.password is not None:
-                user_col = app.db.users
-                user = user_col.find_one({'email':auth.username})
-                if user is not None:
-                    encoded_pw = auth.password.encode('utf-8')
-                    if bcrypt.hashpw(encoded_pw, user['password']) == user['password']:
-                        return func (*args,**kwargs)
-                    else:
-                        return ({'error': 'email or password is not correct'}, 401, None)
-                else:
-                    return ({'error': 'could not find user in the database'}, 400, None)
-            else:
-                return ({'error': 'enter both email and password'}, 400, None)
-
-        elif username is not None and password is not None:
+        if username is not None and password is not None:
             user_col = app.db.users
             user = user_col.find_one({'email':username})
             if user is not None:
@@ -56,6 +47,20 @@ def user_auth(func):
                     return ({'error': 'email or password is not correct'}, 401, None)
             else:
                 return ({'error': 'could not find user in the database'}, 400, None)
+        else:
+            return ({'error': 'enter both email and password'}, 400, None)
+
+        # elif username is not None and password is not None:
+        #     user_col = app.db.users
+        #     user = user_col.find_one({'email':username})
+        #     if user is not None:
+        #         encoded_pw = password.encode('utf-8')
+        #         if bcrypt.hashpw(encoded_pw, user['password']) == user['password']:
+        #             return func (*args,**kwargs)
+        #         else:
+        #             return ({'error': 'email or password is not correct'}, 401, None)
+        #     else:
+        #         return ({'error': 'could not find user in the database'}, 400, None)
 
     return wrapper
 
@@ -202,7 +207,7 @@ class User(Resource):
             user = user_col.find_one({'email':user_email})
             if user is not None:
                 #check password
-                
+
                 password_encoded = user_password.encode('utf-8')
                 if bcrypt.hashpw(password_encoded,user['password']) == user['password']:
                     user['password'] = ''
@@ -228,9 +233,10 @@ class User(Resource):
     @user_auth
     def delete(self):
 
-        #pdb.set_trace()
-        auth = request.authorization
-        email_json = auth.username('email')
+        # pdb.set_trace()
+        auth_code = request.headers['authorization']
+        #email_json = auth.username('email')
+        email_json, password = decode(auth_code)
 
         if self.is_user_exist(email_json) is True:
             user_dict = app.db.users.find_one({'email':email_json})

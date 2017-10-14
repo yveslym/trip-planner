@@ -14,11 +14,12 @@ from basicauth import encode
 
 
 def generateBasicAuthHeader(username, password):
-
+    # pdb.set_trace()
+    loginString = ("%@:%@"+ username+ password)
     #concatString = username + ":" + password
-    #utf8 = concatString.encode('utf-8')
-    #base64String =  base64.b64encode(utf8)
-    #finalString = "Basic " + str(base64String)
+    utf8 = loginString.encode('utf-8')
+    base64String =  base64.b64encode(utf8)
+    finalString = "Basic " + str(base64String)
     encoded_str = encode(username, password)
     username, password = decode(encoded_str)
     return encoded_str
@@ -48,45 +49,45 @@ class TripPlannerTestCase(unittest.TestCase):
 
 
 
-    # def test_post_user(self):
-    #     print('______________________TESTING INSERT USER__________________')
+    def test_post_user(self):
+        print('______________________TESTING INSERT USER__________________')
+        new_user = Create_user()
+        user = new_user.create()
+        #pdb.set_trace()
+
+        response = self.app.post('/users',
+                                 headers = None,
+                                 data = json.dumps(dict(first_name = user.first_name,
+                                                        last_name = user.last_name,
+                                                        email = user.email,
+                                                        password = user.password,
+                                                        country = user.country,
+                                                        username = user.username)),
+                                 content_type = 'application/json')
+        print('post new user response:')
+        print(response)
+        self.assertEqual(response.status_code,201)
+
+
+    # def test_post_with_missing_field(self):
+    #
+    #     # for this test i purposely omit the email field and expect an error
+    #
     #     new_user = Create_user()
     #     user = new_user.create()
-    #     #pdb.set_trace()
     #
     #     response = self.app.post('/users',
-    #                              headers = None,
-    #                              data = json.dumps(dict(first_name = user.first_name,
-    #                                                     last_name = user.last_name,
-    #                                                     email = user.email,
-    #                                                     password = user.password,
-    #                                                     country = user.country,
-    #                                                     username = user.username)),
-    #                              content_type = 'application/json')
-    #     print('post new user response:')
-    #     print(response)
-    #     self.assertEqual(response.status_code,201)
+    #                              headers=None,
+    #                              data=json.dumps(dict(first_name=user.first_name,
+    #                                                   last_name=user.last_name,
+    #                                                   password="",
+    #                                                   country=user.country,
+    #                                                   username=user.username)),
+    #                              content_type='application/json')
     #
-    #
-    # # def test_post_with_missing_field(self):
-    # #
-    # #     # for this test i purposely omit the email field and expect an error
-    # #
-    # #     new_user = Create_user()
-    # #     user = new_user.create()
-    # #
-    # #     response = self.app.post('/users',
-    # #                              headers=None,
-    # #                              data=json.dumps(dict(first_name=user.first_name,
-    # #                                                   last_name=user.last_name,
-    # #                                                   password="",
-    # #                                                   country=user.country,
-    # #                                                   username=user.username)),
-    # #                              content_type='application/json')
-    # #
-    # #     self.assertEqual(response.status_code, 400)
-    # #     self.assertEqual(response.data.decode("utf-8"), '{"error": "missing fields"}')
-    #
+    #     self.assertEqual(response.status_code, 400)
+    #     self.assertEqual(response.data.decode("utf-8"), '{"error": "missing fields"}')
+
     # def test_post_existing_user(self):
     #
     #     #expect to get an error, with message user exist
@@ -144,11 +145,11 @@ class TripPlannerTestCase(unittest.TestCase):
         print('______________________TESTING DELETING EXISTING AND NONE EXISTING__________________')
 
         #randomly get a country
-        mail = "yves2300@mail.com"
+        mail = "Rodgers.Maxim@yahoo.fr"
         header_code = generateBasicAuthHeader(mail,'123456')
 
         #delete user on the picked email
-        
+
         deleted = self.app.delete('/users',
                                   headers = dict(authorization=header_code))
                                 #   query_string = dict(email = mail))
@@ -160,14 +161,15 @@ class TripPlannerTestCase(unittest.TestCase):
 
 
 
-        deleted = self.app.delete('/users', query_string=dict(email=mail))
+        deleted = self.app.delete('/users',
+                                  headers = dict(authorization=header_code))
 
         print('DELTETING A NONE EXISTING USER')
         print ('user to delete:', mail)
         print('delete user response:')
         print(deleted)
-        self.assertEqual(deleted.status_code, 404)
-        self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
+        self.assertEqual(deleted.status_code, 400)
+        #self.assertEqual(deleted.data.decode("utf-8"), '{"error": "User with email ' + mail + ' does not exist"}')
 
 
         #----------------------------------------------------------------------------------#

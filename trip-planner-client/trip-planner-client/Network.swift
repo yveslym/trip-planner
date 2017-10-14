@@ -21,6 +21,7 @@ class Network{
         request.addValue("application/json", forHTTPHeaderField: "content-type")
         
         do{
+            //try users.encode(to: JSONEncoder() as! Encoder)
             let jsonBody = try JSONEncoder().encode(users)
             request.httpBody = jsonBody
         }catch{}
@@ -96,7 +97,28 @@ class Network{
         request.httpMethod = "DELETE"
         request.addValue("application/json", forHTTPHeaderField: "content-type")
         request.addValue(authHeaderString, forHTTPHeaderField: "Authorization")
-        
+     
+        let session = URLSession.shared
+        let task = session.dataTask(with: request){(data,response,error)in
+            do{
+                if (error == nil) {
+                    // Success
+                    let statusCode = (response as! HTTPURLResponse).statusCode
+                    let testResponse = (response as? HTTPURLResponse)?.textEncodingName
+                    print("URL Session Task Succeeded: HTTP \(statusCode)")
+                    print(testResponse)
+                    
+                }
+                else {
+                    // Failure
+                    let statusCode = (response as! HTTPURLResponse).statusCode
+                    print (statusCode)
+                    print("URL Session Task Failed: %@", error!.localizedDescription)
+                }
+            }
+            catch{}
+        }
+        task.resume()
     }
     
 }

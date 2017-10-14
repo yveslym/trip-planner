@@ -9,7 +9,7 @@ import pdb
 import uuid
 from socket import *
 from basicauth import decode
-# from basicauth import decode import the decoder 
+# from basicauth import decode import the decoder
 sock=socket()
 sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 
@@ -26,7 +26,7 @@ def user_auth(func):
     def wrapper(*args,**kwargs):
 
         auth = request.authorization
-        #pdb.set_trace()
+
         auth_code = request.headers['authorization']
         username, password = decode(auth_code)
 
@@ -155,7 +155,7 @@ class User(Resource):
         first_name = request.json.get('first_name')
         last_name =request.json.get('last_name')
 
-        #pdb.set_trace()
+
         if user_email is None:
             return ({'error': 'no email provided'}, 400, None)
 
@@ -169,7 +169,7 @@ class User(Resource):
             return ({'error': 'no last name provided'}, 400, None)
 
         elif 'first_name' in user_json and 'last_name' in user_json and 'email' in user_json and password is not None:
-            #pdb.set_trace()
+
             # encrypt the password
             encoded_password = password.encode('utf-8')
             hashed = bcrypt.hashpw(encoded_password, bcrypt.gensalt(rounds))
@@ -202,7 +202,7 @@ class User(Resource):
             user = user_col.find_one({'email':user_email})
             if user is not None:
                 #check password
-                #pdb.set_trace()
+                
                 password_encoded = user_password.encode('utf-8')
                 if bcrypt.hashpw(password_encoded,user['password']) == user['password']:
                     user['password'] = ''

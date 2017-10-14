@@ -14,7 +14,7 @@ from basicauth import encode
 
 
 def generateBasicAuthHeader(username, password):
-    
+
     #concatString = username + ":" + password
     #utf8 = concatString.encode('utf-8')
     #base64String =  base64.b64encode(utf8)
@@ -148,7 +148,7 @@ class TripPlannerTestCase(unittest.TestCase):
         header_code = generateBasicAuthHeader(mail,'123456')
 
         #delete user on the picked email
-        #pdb.set_trace()
+        
         deleted = self.app.delete('/users',
                                   headers = dict(authorization=header_code))
                                 #   query_string = dict(email = mail))

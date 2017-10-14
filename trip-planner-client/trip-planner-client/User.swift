@@ -42,6 +42,18 @@ extension UserData {
     }
 }
 
+struct Errors: Decodable{
+    var error:String
+    
+    enum errorKey:String, CodingKey {
+        case error
+    }
+    init(from decoder:Decoder)throws {
+        let contenaire = try decoder.container(keyedBy: errorKey.self)
+         error = (try contenaire.decodeIfPresent(String.self, forKey: .error))!
+    }
+}
+
 
 
 

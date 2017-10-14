@@ -29,15 +29,11 @@ class Network{
         let session = URLSession.shared
         let task = session.dataTask(with: request){(data,response,error) in
             
-            
-            
             guard let data = data else {return}
             
             do{
                 _ = try JSONSerialization.jsonObject(with: data, options: [])
             }catch{}
-        
-       
         
         if (error == nil) {
             // Success
@@ -59,6 +55,7 @@ class Network{
         
     }
     
+    // function to get user from the database by the auth token
     static func fetch_user(email: String, password: String){
       
         // get the auth header
@@ -86,6 +83,7 @@ class Network{
         task.resume()
     }
     
+    ///function to delete user by with the auth token
     static func deleteUser(email:String, password: String){
         
         let authHeaderString = BasicAuth.generateBasicAuthHeader(username: email, password: password)
@@ -104,9 +102,14 @@ class Network{
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! HTTPURLResponse).statusCode
-                    let testResponse = (response as? HTTPURLResponse)?.textEncodingName
+                    _ = (response as? HTTPURLResponse)?.textEncodingName
                     print("URL Session Task Succeeded: HTTP \(statusCode)")
-                    print(testResponse)
+                    
+                    if statusCode == 400 || statusCode == 401{
+                    //let responseData = String(data: data!, encoding: String.Encoding.utf8)!
+                        let errorMessage = try JSONDecoder().decode(Errors.self, from: data!)
+                    print (errorMessage.error)
+                    }
                     
                 }
                 else {
@@ -116,7 +119,7 @@ class Network{
                     print("URL Session Task Failed: %@", error!.localizedDescription)
                 }
             }
-            catch{}
+            catch {}
         }
         task.resume()
     }

@@ -29,6 +29,9 @@ class ViewController: UIViewController {
     @IBAction func getUser(_ sender: Any) {
         Network.fetch_user(email: "yves2300@mail.com", password: "123456")
     }
+    @IBAction func deleteUser(_ sender: Any) {
+        Network.deleteUser(email: "yves2300@mail.com", password: "123456")
+    }
     
 }
 

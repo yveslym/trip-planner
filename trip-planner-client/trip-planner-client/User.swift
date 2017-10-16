@@ -13,6 +13,7 @@ struct UserData: Codable {
     var lastName: String
     var email: String
     var password:String
+    var credential: String?
     
     enum userKey:String,CodingKey{
         case first_name
@@ -20,7 +21,6 @@ struct UserData: Codable {
         case email
         case password
     }
-    
 }
 
 extension UserData {
@@ -39,6 +39,14 @@ extension UserData {
         try contenaire.encode(lastName, forKey: .last_name)
         try contenaire.encode(email, forKey: .email)
         try contenaire.encode(password, forKey: .password)
+    }
+    
+    init(email:String,password:String,firstName:String,lastName:String){
+        self.email = email
+        self.password = password
+        self.firstName = firstName
+        self.lastName = lastName
+         self.credential = BasicAuth.generateBasicAuthHeader(user: self)
     }
 }
 

@@ -21,7 +21,7 @@ class Network{
         request.addValue("application/json", forHTTPHeaderField: "content-type")
         
         do{
-            //try users.encode(to: JSONEncoder() as! Encoder)
+           
             let jsonBody = try JSONEncoder().encode(users)
             request.httpBody = jsonBody
         }catch{}
@@ -51,15 +51,48 @@ class Network{
          task.resume()
     }
     
-    static func create_trip(){
+    static func create_trip(user:UserData,trip:Trip_Data){
+        
+        let urlString = "http://127.0.0.1:5000/users"
+        guard let url = URL(string: urlString) else {return}
+        var request = URLRequest(url: url)
+    
+        
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        
+        do{
+            
+            let jsonBody = try JSONEncoder().encode(trip)
+            request.httpBody = jsonBody
+        }catch{}
+        
+        
+        let session = URLSession.shared
+        let task = session.dataTask(with: request){data,response,Error in
+          
+         
+            
+            do{
+                
+            }
+            catch{}
+        }
+        task.resume()
+    }
+    
+    static func get_trip(user:UserData){
+        
+    }
+    
+    static func delete_trip(user:UserData){
         
     }
     
     // function to get user from the database by the auth token
-    static func fetch_user(email: String, password: String){
+    static func fetch_user(user:UserData){
       
         // get the auth header
-      let authHeaderString =  BasicAuth.generateBasicAuthHeader(username: email, password: password)
         
         let urlString = "http://127.0.0.1:5000/users"
         guard let url = URL(string: urlString) else {return}
@@ -67,7 +100,7 @@ class Network{
         
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "content-type")
-        request.addValue(authHeaderString, forHTTPHeaderField: "Authorization")
+        request.addValue(user.credential!, forHTTPHeaderField: "Authorization")
         
         let session = URLSession.shared
         let task = session.dataTask(with: request){(data,response,error) in
@@ -84,9 +117,9 @@ class Network{
     }
     
     ///function to delete user by with the auth token
-    static func deleteUser(email:String, password: String){
+    static func deleteUser(user:UserData){
         
-        let authHeaderString = BasicAuth.generateBasicAuthHeader(username: email, password: password)
+      
         
         let urlString = "http://127.0.0.1:5000/users"
         guard let url = URL(string: urlString) else {return}
@@ -94,8 +127,8 @@ class Network{
         
         request.httpMethod = "DELETE"
         request.addValue("application/json", forHTTPHeaderField: "content-type")
-        request.addValue(authHeaderString, forHTTPHeaderField: "Authorization")
-     
+        request.addValue(user.credential!, forHTTPHeaderField: "Authorization")
+        
         let session = URLSession.shared
         let task = session.dataTask(with: request){(data,response,error)in
             do{
@@ -128,8 +161,8 @@ class Network{
 
 
 struct BasicAuth {
-    static func generateBasicAuthHeader(username: String, password: String) -> String {
-        let loginString = String(format: "%@:%@", username, password)
+    static func generateBasicAuthHeader(user:UserData) -> String {
+        let loginString = String(format: "%@:%@", user.email, user.password)
         let loginData: Data = loginString.data(using: String.Encoding.utf8)!
         let base64LoginString = loginData.base64EncodedString(options: .init(rawValue: 0))
         let authHeaderString = "Basic \(base64LoginString)"
@@ -137,3 +170,6 @@ struct BasicAuth {
         return authHeaderString
     }
 }
+
+
+

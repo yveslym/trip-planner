@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    var user = UserData(email: "yves2300@yahoo.fr", password: "123456", firstName: "yves", lastName: "songolo")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -22,16 +24,28 @@ class ViewController: UIViewController {
 
     @IBAction func addUser(_ sender: Any) {
         
-        let user = UserData(firstName:"yvesl", lastName:  "songolo", email:  "yves2300@mail.com", password: "123456")
         
-        Network.create_user(users: user)
+        
+        Network.create_user(users: self.user)
     }
     @IBAction func getUser(_ sender: Any) {
-        Network.fetch_user(email: "yves2300@mail.com", password: "123456")
+        Network.fetch_user(user: self.user)
     }
     @IBAction func deleteUser(_ sender: Any) {
-        Network.deleteUser(email: "yves2300@mail.com", password: "123456")
+        Network.deleteUser(user: self.user)
     }
+    
+    @IBAction func getTrip(_ sender: Any) {
+        Network.create_trip()
+    }
+    @IBAction func post(_ sender: Any) {
+        
+    }
+    
+    @IBAction func deleteTrips(_ sender: Any) {
+        
+    }
+    @IBOutlet weak var deleteTrip: UIButton!
     
 }
 

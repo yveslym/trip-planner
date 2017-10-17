@@ -14,7 +14,7 @@ sock=socket()
 sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 
 app = Flask(__name__)
-mongo = MongoClient('localhost', 2701)
+mongo = MongoClient('localhost', 27017)
 app.db = mongo.trip_planner_test
 rounds = app.bcrypt_rounds = 12
 api = Api(app)
@@ -137,13 +137,14 @@ class User(Resource):
 
     def post(self):
         user_json = request.json
+        user_arg = request.args
         user_collect = app.db.users
 
-
-        user_email = request.json.get('email')
-        password = request.json.get('password')
-        first_name = request.json.get('first_name')
-        last_name =request.json.get('last_name')
+        #pdb.set_trace()
+        user_email = user_json.get('email')
+        password = user_json.get('password')
+        first_name = user_json.get('first_name')
+        last_name =user_json.get('last_name')
 
 
         if user_email is None:
@@ -162,8 +163,7 @@ class User(Resource):
 
             # encrypt the password
             encoded_password = password.encode('utf-8')
-            hashed = bcrypt.hashpw(encoded_password, bcrypt.gensalt(rounds))
-            user_json['password'] = hashed
+            user_json['password'] = bcrypt.hashpw(encoded_password, bcrypt.gensalt(rounds))
             if self.is_user_exist(user_email) is False:
                 user_collect = app.db.users
                 user_collect.insert_one(user_json)
@@ -177,9 +177,9 @@ class User(Resource):
 
     @user_auth
     def get(self):
-        pdb.set_trace()
+
         auth = request.authorization
-        pdb.set_trace()
+
         if auth.username is not None and auth.password is not None:
             user_col = app.db.users
             user = user_col.find_one({'email':auth.username})
@@ -288,4 +288,4 @@ if __name__ == '__main__':
     # Turn this on in debug mode to get detailled information about request
     # related exceptions: http://flask.pocoo.org/docs/0.10/config/
     app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-    app.run(debug=True, port=27017)
+    app.run(debug=True, port=8080)

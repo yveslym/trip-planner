@@ -30,33 +30,33 @@ enum Route{
             return "/trips"
         }
     }
-    //==> operation 1. function to get the url param base on case requierement
+    //==> operation 2. function to get the url param base on case requierement
     
-    func URLparameters(trip:Trip_Data? = nil, user:UserData? = nil)->[String:String]{
+    func URLparameters(trip:Trip_Data? = nil, user:UserData? = nil)->[String:String]?{
         switch self {
         case .createUser:
             let param = ["first_name":user?.firstName, "last_name":user?.lastName]
-            return param as! [String : String]
+            return param as? [String : String]
        
         case .deleteTrip:
             let param = ["trip_id":trip?.tripID]
-            return param as! [String : String]
+            return param as? [String : String]
     
         case .createTrip:
             let param = ["name":trip?.name,
                          "destination":trip?.destination,
-                         "stop_point":trip?.stopPoint[0],
+                         "stop_point":trip?.stopPoint![0],
                          "start_date":trip?.startDate]
-            return param as! [String : String]
+            return param as? [String : String]
             
         case .fetchTrip: fallthrough
         case .fetchUser: fallthrough
         case .deleteUser:
-            return ["":""]
+            return nil
         }
     }
     
-    //==> operation 2. function to pass Headers parameters base on case requierement
+    //==> operation 3. function to pass Headers parameters base on case requierement
     
     func headers(user:UserData? = nil) -> [String:String] {
         switch self {
@@ -72,7 +72,7 @@ enum Route{
         }
     }
     
-    //==>> operation 3. function to pass http Method base on case requierement
+    //==>> operation 4. function to pass http Method base on case requierement
     func httpMethod()-> String{
         
         switch self {
@@ -87,14 +87,13 @@ enum Route{
             return "GET"
         }
     }
-    //==>> operation 4. function to pass jsonBody
+    //==>> operation 5. function to pass jsonBody
     func jsonBody(user:UserData? = nil, trip: Trip_Data? = nil)->Data?{
      
         switch self {
         case .createUser:
             var jsonBody = Data()
             do{
-                
                  jsonBody = try JSONEncoder().encode(user)
             }catch{}
         return jsonBody
@@ -123,16 +122,16 @@ class Networking{
     static func operation(route:Route, user:UserData? = nil,trip: Trip_Data? = nil, completion: @escaping(Data?, Int)->Void){
         
         // 1. set the url path
-        let baseURL = "http://127.0.0.1:8080"
+        let baseURL = "http://127.0.0.1:27017"
         var url = URL(string: "\(baseURL)\(route.path())")
         
         // 2. check the urlparam condition
         
-        if user != nil{
-            url = url?.appendingQueryParameters(route.URLparameters(user: user))
+        if user != nil && route.URLparameters(user:user) != nil{
+            url = url?.appendingQueryParameters(route.URLparameters(user: user)!)
         }
-        else if trip != nil {
-            url = url?.appendingQueryParameters(route.URLparameters(trip: trip))
+        else if trip != nil && route.URLparameters(trip:trip) != nil {
+            url = url?.appendingQueryParameters(route.URLparameters(trip: trip)!)
         }
         
         var request = URLRequest(url: url!)
@@ -158,7 +157,10 @@ class Networking{
         
         let session = URLSession.shared
         let task = session.dataTask(with: request){data,response,error in
-            
+            if error != nil{
+                print("error")
+                print("here")
+            }
             do{
             guard let data = data else {return}
                 let statusCode = (response as! HTTPURLResponse).statusCode

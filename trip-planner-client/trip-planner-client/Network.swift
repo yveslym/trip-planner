@@ -159,16 +159,8 @@ class Network{
 }
 
 
-struct BasicAuth {
-    static func generateBasicAuthHeader(user:UserData) -> String {
-        let loginString = String(format: "%@:%@", user.email, user.password)
-        let loginData: Data = loginString.data(using: String.Encoding.utf8)!
-        let base64LoginString = loginData.base64EncodedString(options: .init(rawValue: 0))
-        let authHeaderString = "Basic \(base64LoginString)"
-        
-        return authHeaderString
-    }
-}
+
+
 
 
 

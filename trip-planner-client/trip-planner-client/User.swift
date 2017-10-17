@@ -9,10 +9,10 @@
 import Foundation
 
 struct UserData: Codable {
-    var firstName: String
-    var lastName: String
-    var email: String
-    var password:String
+    var firstName: String?
+    var lastName: String?
+    var email: String?
+    var password:String?
     var credential: String?
     
     enum userKey:String,CodingKey{
@@ -41,11 +41,11 @@ extension UserData {
         try contenaire.encode(password, forKey: .password)
     }
     
-    init(email:String,password:String,firstName:String,lastName:String){
-        self.email = email
-        self.password = password
-        self.firstName = firstName
-        self.lastName = lastName
+    init(email:String? = nil,password:String? = nil,firstName:String? = nil,lastName:String? = nil){
+        self.email = email!
+        self.password = password!
+        self.firstName = firstName!
+        self.lastName = lastName!
          self.credential = BasicAuth.generateBasicAuthHeader(user: self)
     }
 }

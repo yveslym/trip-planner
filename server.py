@@ -24,17 +24,13 @@ api = Api(app)
 
 def user_auth(func):
     def wrapper(*args,**kwargs):
-
+        #pdb.set_trace()
         auth = request.authorization
-        #pdb.set_trace()
-
-        # username = auth.username
-        # password = auth.password
 
 
-        auth_code = request.headers['authorization']
-        username, password = decode(auth_code)
-        #pdb.set_trace()
+        username = auth.username
+        password = auth.password
+
 
         if username is not None and password is not None:
             user_col = app.db.users
@@ -181,10 +177,9 @@ class User(Resource):
 
     @user_auth
     def get(self):
-        user_email = request.args.get('email')
-        user_password = request.args.get('password')
-        user_country = request.args.get('country')
+        pdb.set_trace()
         auth = request.authorization
+        pdb.set_trace()
         if auth.username is not None and auth.password is not None:
             user_col = app.db.users
             user = user_col.find_one({'email':auth.username})
@@ -293,4 +288,4 @@ if __name__ == '__main__':
     # Turn this on in debug mode to get detailled information about request
     # related exceptions: http://flask.pocoo.org/docs/0.10/config/
     app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=27017)

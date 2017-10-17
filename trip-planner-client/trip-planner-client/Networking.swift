@@ -123,7 +123,7 @@ class Networking{
     static func operation(route:Route, user:UserData? = nil,trip: Trip_Data? = nil, completion: @escaping(Data?, Int)->Void){
         
         // 1. set the url path
-        let baseURL = "http://127.0.0.1:5000"
+        let baseURL = "http://127.0.0.1:8080"
         var url = URL(string: "\(baseURL)\(route.path())")
         
         // 2. check the urlparam condition
@@ -168,21 +168,18 @@ class Networking{
         }
         task.resume()
     }
-    
-//    //==> method to create user and trip
-//
-//    func create(route:Route, user:UserData? = nil, trip: Trip_Data? = nil, completion: @escaping (Data?,Int?)->Void){
-//
-//        //1. set up the url route
-//        let baseURL = "http://127.0.0.1:5000"
-//        var url = URL(string: "\(baseURL)\(route.path())")
-//
-//        //2.
-//
-//    }
-    
 }
-    
+struct BasicAuth {
+    static func generateBasicAuthHeader(user:UserData) -> String {
+        let loginString = String(format: "%@:%@", user.email!, user.password!)
+        let loginData: Data = loginString.data(using: String.Encoding.utf8)!
+        let base64LoginString = loginData.base64EncodedString(options: .init(rawValue: 0))
+        let authHeaderString = "Basic \(base64LoginString)"
+        
+        return authHeaderString
+}
+}
+
 
 
 

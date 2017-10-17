@@ -21,7 +21,8 @@ def generateBasicAuthHeader(username, password):
     base64String =  base64.b64encode(utf8)
     finalString = "Basic " + str(base64String)
 
-    username, password = decode(encoded_str)
+    encoded_str = encode(username,password)
+    #username, password = decode(encoded_str)
     return encoded_str
 
 
@@ -69,76 +70,76 @@ class TripPlannerTestCase(unittest.TestCase):
         self.assertEqual(response.status_code,201)
 
 
-    # def test_post_with_missing_field(self):
-    #
-    #     # for this test i purposely omit the email field and expect an error
-    #
-    #     new_user = Create_user()
-    #     user = new_user.create()
-    #
-    #     response = self.app.post('/users',
-    #                              headers=None,
-    #                              data=json.dumps(dict(first_name=user.first_name,
-    #                                                   last_name=user.last_name,
-    #                                                   password="",
-    #                                                   country=user.country,
-    #                                                   username=user.username)),
-    #                              content_type='application/json')
-    #
-    #     self.assertEqual(response.status_code, 400)
-    #     self.assertEqual(response.data.decode("utf-8"), '{"error": "missing fields"}')
+    def test_post_with_missing_field(self):
 
-    # def test_post_existing_user(self):
-    #
-    #     #expect to get an error, with message user exist
-    #     print('______________________TESTING POST EXISTING USER__________________')
-    #
-    #     #randomly get a country
-    #     index = randint(0, 3)
-    #     arr = ['usa','canada','uk','france']
-    #     countr = arr[index]
-    #
-    #     #randomly get a user from the picked country
-    #     response = self.app.get('/users',
-    #                             query_string=dict(country=countr))
-    #     response_json = json.loads(response.data.decode())
-    #
-    #     user_array = []
-    #     for user in response_json:
-    #         user_array.append(user)
-    #
-    #     user = user_array[randint(0,len(user_array) -1 )]
-    #     mail = user['email']
-    #
-    #
-    #     post = self.app.post('/users',
-    #                             headers = None,
-    #                             data = json.dumps(dict(first_name = 'Jacquelyn',
-    #                                                    last_name = 'Rivera',
-    #                                                    email = 'Jacquelyn.Rivera@yahoo.com',
-    #                                                    password = '123456',
-    #                                                    country = 'usa',
-    #                                                    username = 'JacquelynRivera')),
-    #                             content_type = 'application/json')
-    #     print('post with existing user reponse:')
-    #     print(post)
-    #     self.assertEqual(post.status_code, 400)
-    #
-    #
-    #
-    # def test_get_user(self):
-    #     print('______________________TESTING GET USER__________________')
-    #     response = self.app.get(
-    #         '/users',
-    #         query_string=dict(country = 'usa')
-    #         #headers=dict(generateAuthHeader("some@email.com", "password"))
-    #         )
-    #
-    #     print('get user response:')
-    #     print(response)
-    #     #response_json = json.loads(response.data.decode())
-    #
-    #     self.assertEqual(response.status_code, 200)
+        # for this test i purposely omit the email field and expect an error
+
+        new_user = Create_user()
+        user = new_user.create()
+
+        response = self.app.post('/users',
+                                 headers=None,
+                                 data=json.dumps(dict(first_name=user.first_name,
+                                                      last_name=user.last_name,
+                                                      password="",
+                                                      country=user.country,
+                                                      username=user.username)),
+                                 content_type='application/json')
+
+        self.assertEqual(response.status_code, 400)
+        # self.assertEqual(response.data.decode("utf-8"), '{"error": "missing fields"}')
+
+    def test_post_existing_user(self):
+
+        #expect to get an error, with message user exist
+        print('______________________TESTING POST EXISTING USER__________________')
+
+        #randomly get a country
+        index = randint(0, 3)
+        arr = ['usa','canada','uk','france']
+        countr = arr[index]
+
+        #randomly get a user from the picked country
+        response = self.app.get('/users',
+                                query_string=dict(country=countr))
+        response_json = json.loads(response.data.decode())
+
+        user_array = []
+        for user in response_json:
+            user_array.append(user)
+
+        user = user_array[randint(0,len(user_array) -1 )]
+        mail = user['email']
+
+
+        post = self.app.post('/users',
+                                headers = None,
+                                data = json.dumps(dict(first_name = 'Jacquelyn',
+                                                       last_name = 'Rivera',
+                                                       email = 'Jacquelyn.Rivera@yahoo.com',
+                                                       password = '123456',
+                                                       country = 'usa',
+                                                       username = 'JacquelynRivera')),
+                                content_type = 'application/json')
+        print('post with existing user reponse:')
+        print(post)
+        self.assertEqual(post.status_code, 400)
+
+
+
+    def test_get_user(self):
+        print('______________________TESTING GET USER__________________')
+        response = self.app.get(
+            '/users',
+            query_string=dict(country = 'usa')
+            #headers=dict(generateAuthHeader("some@email.com", "password"))
+            )
+
+        print('get user response:')
+        print(response)
+        #response_json = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
 
 
     def test_delete_user(self):

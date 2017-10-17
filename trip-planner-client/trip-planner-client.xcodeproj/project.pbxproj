@@ -16,6 +16,7 @@
 		20D44E781F90280E005F2C2B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20D44E761F90280E005F2C2B /* LaunchScreen.storyboard */; };
 		20D44E801F9029C7005F2C2B /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D44E7F1F9029C7005F2C2B /* Network.swift */; };
 		20D44E821F902A2E005F2C2B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D44E811F902A2E005F2C2B /* User.swift */; };
+		20FEA5B61F96084A00172B8F /* RegisterUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FEA5B51F96084A00172B8F /* RegisterUIViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		20D44E791F90280E005F2C2B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		20D44E7F1F9029C7005F2C2B /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		20D44E811F902A2E005F2C2B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		20FEA5B51F96084A00172B8F /* RegisterUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUIViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 		20D44E6C1F90280E005F2C2B /* trip-planner-client */ = {
 			isa = PBXGroup;
 			children = (
+				20FEA5B41F9607E600172B8F /* View Controller */,
 				20D44E6D1F90280E005F2C2B /* AppDelegate.swift */,
 				20D44E6F1F90280E005F2C2B /* ViewController.swift */,
 				20D44E711F90280E005F2C2B /* Main.storyboard */,
@@ -74,6 +77,14 @@
 				205000091F95A86D007DDF8F /* Support+Extension.swift */,
 			);
 			path = "trip-planner-client";
+			sourceTree = "<group>";
+		};
+		20FEA5B41F9607E600172B8F /* View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				20FEA5B51F96084A00172B8F /* RegisterUIViewController.swift */,
+			);
+			path = "View Controller";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,6 +161,7 @@
 			files = (
 				20D44E821F902A2E005F2C2B /* User.swift in Sources */,
 				2050000A1F95A86D007DDF8F /* Support+Extension.swift in Sources */,
+				20FEA5B61F96084A00172B8F /* RegisterUIViewController.swift in Sources */,
 				205000081F959354007DDF8F /* Networking.swift in Sources */,
 				20D44E701F90280E005F2C2B /* ViewController.swift in Sources */,
 				20D44E6E1F90280E005F2C2B /* AppDelegate.swift in Sources */,

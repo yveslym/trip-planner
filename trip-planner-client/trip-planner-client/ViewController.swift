@@ -48,7 +48,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func deleteTrips(_ sender: Any) {
-     //Networking.operation(route: .deleteTrip, user: user, trip: trip, completion: <#T##(Data?, Int) -> Void#>)
+    // Networking.operation(route: .deleteTrip, user: user, trip: u, completion: <#T##(Data?, Int) -> Void#>)
     }
     @IBOutlet weak var deleteTrip: UIButton!
     

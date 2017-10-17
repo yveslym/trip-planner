@@ -50,17 +50,6 @@ def user_auth(func):
         else:
             return ({'error': 'enter both email and password'}, 400, None)
 
-        # elif username is not None and password is not None:
-        #     user_col = app.db.users
-        #     user = user_col.find_one({'email':username})
-        #     if user is not None:
-        #         encoded_pw = password.encode('utf-8')
-        #         if bcrypt.hashpw(encoded_pw, user['password']) == user['password']:
-        #             return func (*args,**kwargs)
-        #         else:
-        #             return ({'error': 'email or password is not correct'}, 401, None)
-        #     else:
-        #         return ({'error': 'could not find user in the database'}, 400, None)
 
     return wrapper
 

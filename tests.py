@@ -20,7 +20,7 @@ def generateBasicAuthHeader(username, password):
     utf8 = loginString.encode('utf-8')
     base64String =  base64.b64encode(utf8)
     finalString = "Basic " + str(base64String)
-    encoded_str = encode(username, password)
+
     username, password = decode(encoded_str)
     return encoded_str
 

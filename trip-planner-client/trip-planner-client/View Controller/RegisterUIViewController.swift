@@ -9,7 +9,7 @@
 import UIKit
 
 class RegisterUIViewController: UIViewController {
-
+    
     @IBOutlet weak var email: UITextField!
     
     @IBOutlet weak var password: UITextField!
@@ -18,7 +18,7 @@ class RegisterUIViewController: UIViewController {
     
     @IBOutlet weak var lname: UITextField!
     
-      @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var loginButton: UIButton!
     
     @IBOutlet weak var registerButton: UIButton!
     
@@ -27,7 +27,7 @@ class RegisterUIViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         fname.isHidden = true
         lname.isHidden = true
         lastLabel.isHidden = true
@@ -36,11 +36,11 @@ class RegisterUIViewController: UIViewController {
     }
     @IBAction func loginTapped(_ sender: Any) {
         
-       
+        
         
         if loginButton.titleLabel?.text == "Login"{
             
-             let user = UserData(email: email.text, password: password.text)
+            let user = UserData(email: email.text, password: password.text)
             
             Networking.operation(route: .fetchUser, user: user, completion: { (data, response) in
                 print(response)
@@ -50,6 +50,14 @@ class RegisterUIViewController: UIViewController {
             let user = UserData(email: email.text, password: password.text, firstName: fname.text, lastName: lname.text)
             Networking.operation(route: .createUser, user: user, completion: { (data, response) in
                 print(response)
+                
+                do{
+                if response == 400 || response == 401{
+                    //let responseData = String(data: data!, encoding: String.Encoding.utf8)!
+                    let errorMessage = try JSONDecoder().decode(Errors.self, from: data!)
+                    print (errorMessage.error)
+                }
+                }catch{}
             })
         }
         
@@ -64,12 +72,12 @@ class RegisterUIViewController: UIViewController {
             lastLabel.isHidden = false
             firstlabel.isHidden = false
             
-           // self.loadView()
+            // self.loadView()
         }
         else if registerButton.titleLabel?.text == "Login"{
             registerButton.titleLabel?.text = "Register?"
             loginButton.titleLabel?.text = "Login"
-           
+            
             fname.isHidden = true
             lname.isHidden = true
             lastLabel.isHidden = true
@@ -81,5 +89,5 @@ class RegisterUIViewController: UIViewController {
     
     
     
-
+    
 }

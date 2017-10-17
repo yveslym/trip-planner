@@ -31,13 +31,13 @@ def user_auth(func):
         username = auth.username
         password = auth.password
 
-
         if username is not None and password is not None:
             user_col = app.db.users
             user = user_col.find_one({'email':username})
             if user is not None:
                 encoded_pw = password.encode('utf-8')
-                if bcrypt.hashpw(encoded_pw, user['password']) == user['password']:
+                #pdb.set_trace()
+                if bcrypt.checkpw(encoded_pw, user['password']):
                     return func (*args,**kwargs)
                 else:
                     return ({'error': 'email or password is not correct'}, 401, None)

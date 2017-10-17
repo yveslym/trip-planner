@@ -14,7 +14,7 @@ sock=socket()
 sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 
 app = Flask(__name__)
-mongo = MongoClient('localhost', 27017)
+mongo = MongoClient('localhost', 2701)
 app.db = mongo.trip_planner_test
 rounds = app.bcrypt_rounds = 12
 api = Api(app)
@@ -293,4 +293,4 @@ if __name__ == '__main__':
     # Turn this on in debug mode to get detailled information about request
     # related exceptions: http://flask.pocoo.org/docs/0.10/config/
     app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-    app.run(debug=True)
+    app.run(debug=True, port=8080)

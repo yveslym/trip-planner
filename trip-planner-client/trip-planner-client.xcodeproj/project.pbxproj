@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		205000081F959354007DDF8F /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205000071F959354007DDF8F /* Networking.swift */; };
+		2050000A1F95A86D007DDF8F /* Support+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205000091F95A86D007DDF8F /* Support+Extension.swift */; };
 		20D44E6E1F90280E005F2C2B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D44E6D1F90280E005F2C2B /* AppDelegate.swift */; };
 		20D44E701F90280E005F2C2B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D44E6F1F90280E005F2C2B /* ViewController.swift */; };
 		20D44E731F90280E005F2C2B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20D44E711F90280E005F2C2B /* Main.storyboard */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		205000071F959354007DDF8F /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		205000091F95A86D007DDF8F /* Support+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Support+Extension.swift"; sourceTree = "<group>"; };
 		20D44E6A1F90280E005F2C2B /* trip-planner-client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "trip-planner-client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		20D44E6D1F90280E005F2C2B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		20D44E6F1F90280E005F2C2B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -65,7 +69,9 @@
 				20D44E761F90280E005F2C2B /* LaunchScreen.storyboard */,
 				20D44E791F90280E005F2C2B /* Info.plist */,
 				20D44E7F1F9029C7005F2C2B /* Network.swift */,
+				205000071F959354007DDF8F /* Networking.swift */,
 				20D44E811F902A2E005F2C2B /* User.swift */,
+				205000091F95A86D007DDF8F /* Support+Extension.swift */,
 			);
 			path = "trip-planner-client";
 			sourceTree = "<group>";
@@ -143,6 +149,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				20D44E821F902A2E005F2C2B /* User.swift in Sources */,
+				2050000A1F95A86D007DDF8F /* Support+Extension.swift in Sources */,
+				205000081F959354007DDF8F /* Networking.swift in Sources */,
 				20D44E701F90280E005F2C2B /* ViewController.swift in Sources */,
 				20D44E6E1F90280E005F2C2B /* AppDelegate.swift in Sources */,
 				20D44E801F9029C7005F2C2B /* Network.swift in Sources */,

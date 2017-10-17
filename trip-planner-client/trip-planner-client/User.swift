@@ -72,12 +72,16 @@ struct Trip_Data: Codable{
     let destination : String
     let stopPoint : [String]
     let status: Bool
+    let tripID:String
+    let startDate:String
     
     enum tripKey: String,CodingKey {
         case name
         case destination
         case stop_point
         case status
+        case trip_id
+        case start_date
     }
 }
 

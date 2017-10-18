@@ -37,11 +37,11 @@ enum Route{
         case .createUser:
             let param = ["first_name":user?.firstName, "last_name":user?.lastName]
             return param as? [String : String]
-       
+            
         case .deleteTrip:
             let param = ["trip_id":trip?.tripID]
             return param as? [String : String]
-    
+            
         case .createTrip:
             let param = ["name":trip?.name,
                          "destination":trip?.destination,
@@ -89,29 +89,48 @@ enum Route{
     }
     //==>> operation 5. function to pass jsonBody
     func jsonBody(user:UserData? = nil, trip: Trip_Data? = nil)->Data?{
-     
+        
         switch self {
         case .createUser:
+            
+            
             var jsonBody = Data()
-            do{
-                 jsonBody = try JSONEncoder().encode(user)
-            }catch{}
-        return jsonBody
-         
-          //  encode user and return the data
+            
+            //return nil just in case we didn't pass the user when creating new one
+            if user != nil{
+                do{
+                    jsonBody = try JSONEncoder().encode(user)
+                }catch{}
+            }
+            else{
+                print("the user is nil,  need to pass a userData")
+                return nil
+            }
+            return jsonBody
+            
+        //  encode user and return the data
         case .createTrip: fallthrough
         case .deleteTrip:
             var jsonBody = Data()
-            do{
-                jsonBody = try JSONEncoder().encode(trip)
-            }catch{}
-            return jsonBody
             
+            if trip != nil{
+                
+                do{
+                    jsonBody = try JSONEncoder().encode(trip)
+                }catch{}
+            }else{
+                print("the trip is nil,  need to pass a userData")
+                return nil
+            }
+            return jsonBody
             
         case .deleteUser: fallthrough
         case .fetchUser: fallthrough
         case .fetchTrip:
             return nil
+            
+            
+            
         }
     }
 }
@@ -122,7 +141,7 @@ class Networking{
     static func operation(route:Route, user:UserData? = nil,trip: Trip_Data? = nil, completion: @escaping(Data?, Int)->Void){
         
         // 1. set the url path
-        let baseURL = "http://127.0.0.1:8080"
+        let baseURL = "http://127.0.0.1:8082"
         var url = URL(string: "\(baseURL)\(route.path())")
         
         // 2. check the urlparam condition
@@ -138,7 +157,7 @@ class Networking{
         
         // 3. check headers condition
         if user != nil{
-        request.allHTTPHeaderFields = route.headers(user: user)
+            request.allHTTPHeaderFields = route.headers(user: user)
         }
         else{
             request.allHTTPHeaderFields = route.headers()
@@ -148,12 +167,10 @@ class Networking{
         
         // 5. check for the json body
         
-        if user != nil{
-            request.httpBody = route.jsonBody(user: user)
+        if route.jsonBody(user: user, trip: trip) == nil{
+            request.httpBody = route.jsonBody(user: user, trip: trip)
         }
-        else if trip != nil {
-            request.httpBody = route.jsonBody( trip: trip)
-        }
+        
         
         let session = URLSession.shared
         let task = session.dataTask(with: request){data,response,error in
@@ -161,12 +178,12 @@ class Networking{
                 print("error")
                 print("here")
             }
-            do{
-            guard let data = data else {return}
+            
+                guard let data = data else {return}
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                 return completion(data,statusCode)
-            }
-            catch{}
+                return completion(data,statusCode)
+            
+        
         }
         task.resume()
     }
@@ -179,7 +196,7 @@ struct BasicAuth {
         let authHeaderString = "Basic \(base64LoginString)"
         
         return authHeaderString
-}
+    }
 }
 
 

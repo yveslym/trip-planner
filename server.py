@@ -8,7 +8,7 @@ from mongoengine import *
 import pdb
 import uuid
 from socket import *
-from basicauth import decode
+from basicauth import encode
 # from basicauth import decode import the decoder
 sock=socket()
 sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
@@ -30,12 +30,14 @@ def user_auth(func):
 
         username = auth.username
         password = auth.password
-
+        #pdb.set_trace()
         if username is not None and password is not None:
             user_col = app.db.users
             user = user_col.find_one({'email':username})
+
             if user is not None:
-                encoded_pw = password.encode('utf-8')
+                encoded_pw = password.encode("utf-8")
+                
                 #pdb.set_trace()
                 if bcrypt.checkpw(encoded_pw, user['password']):
                     return func (*args,**kwargs)
@@ -45,11 +47,7 @@ def user_auth(func):
                 return ({'error': 'could not find user in the database'}, 400, None)
         else:
             return ({'error': 'enter both email and password'}, 400, None)
-
-
     return wrapper
-
-
 
 class Trip(Resource):
     def __init__(self):
@@ -137,7 +135,6 @@ class User(Resource):
 
     def post(self):
         user_json = request.json
-        user_arg = request.args
         user_collect = app.db.users
 
         #pdb.set_trace()
@@ -163,7 +160,9 @@ class User(Resource):
 
             # encrypt the password
             encoded_password = password.encode('utf-8')
-            user_json['password'] = bcrypt.hashpw(encoded_password, bcrypt.gensalt(rounds))
+            hashed = bcrypt.hashpw(encoded_password, bcrypt.gensalt(rounds))
+            user_json['password'] = hashed
+
             if self.is_user_exist(user_email) is False:
                 user_collect = app.db.users
                 user_collect.insert_one(user_json)
@@ -179,57 +178,25 @@ class User(Resource):
     def get(self):
 
         auth = request.authorization
+        user_col = app.db.users
+        user = user_col.find_one({'email':auth.username})
+        user.pop('password')
+        return (user, 200, None)
 
-        if auth.username is not None and auth.password is not None:
-            user_col = app.db.users
-            user = user_col.find_one({'email':auth.username})
-            user.pop('password')
-            return (user, 200, None)
-
-        if user_email is not None and user_password is not None:
-            user_col = app.db.users
-            user = user_col.find_one({'email':user_email})
-            if user is not None:
-                #check password
-
-                password_encoded = user_password.encode('utf-8')
-                if bcrypt.hashpw(password_encoded,user['password']) == user['password']:
-                    user['password'] = ''
-                    return (user,200,None)
-                else:
-                    return ({'error': 'email or password is not correct'}, 401, None)
-            else:
-                return ({'error': 'enter email and password'}, 400, None)
-
-        if user_country is None:
-            return ({'error': 'no country argument was passed'}, 404, None)
-        user_dict = app.db.users.find({'country':user_country})
-        if user_dict is None:
-            return ({'error': 'user does not exist'}, 404, None)
-        else:
-            arr = []
-            for user in user_dict:
-                user.pop('password')
-                arr.append(user)
-
-            return (arr, 200, None)
 
     @user_auth
     def delete(self):
 
         # pdb.set_trace()
         auth_code = request.headers['authorization']
-        #email_json = auth.username('email')
+
+        auth = request.authorization
+
         email_json, password = decode(auth_code)
 
-        if self.is_user_exist(email_json) is True:
-            user_dict = app.db.users.find_one({'email':email_json})
-            app.db.users.remove(user_dict)
-            return ({'delete':'the user '+ email_json+ ' as been deleted'}, 200, None)
-        else:
-
-
-            return ({'error': 'User with email ' + email_json + " does not exist"}, 404, None)
+        user_dict = app.db.users.find_one({'email':auth.username})
+        app.db.users.remove(user_dict)
+        return ({'delete':'the user '+ email_json+ ' as been deleted'}, 200, None)
 
     # def patch(self):
     #     user_email = request.arg.get('email')
@@ -288,4 +255,4 @@ if __name__ == '__main__':
     # Turn this on in debug mode to get detailled information about request
     # related exceptions: http://flask.pocoo.org/docs/0.10/config/
     app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=8082)

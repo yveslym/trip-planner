@@ -14,23 +14,38 @@ struct UserData: Codable {
     var email: String?
     var password:String?
     var credential: String?
+    var trips: [Trip_Data]?
+    var userID: String?
     
     enum userKey:String,CodingKey{
         case first_name
         case last_name
         case email
         case password
+        case _id
     }
 }
 
 extension UserData {
     init(from decoder: Decoder) throws {
         let contenaire = try decoder.container(keyedBy: userKey.self)
-        email = (try contenaire.decodeIfPresent(String.self, forKey: .email))!
-        firstName = (try contenaire.decodeIfPresent(String.self, forKey: .first_name))!
-        lastName = (try contenaire.decodeIfPresent(String.self, forKey: .last_name))!
-        password = ""
+        self.email = (try contenaire.decodeIfPresent(String.self, forKey: .email))!
+        self.firstName = (try contenaire.decodeIfPresent(String.self, forKey: .first_name))!
+        self.lastName = (try contenaire.decodeIfPresent(String.self, forKey: .last_name))!
+        self.userID = (try contenaire.decodeIfPresent(String.self, forKey: ._id))
+        self.password = ""
+        var trip = [Trip_Data]()
+        self.trips = nil
         
+        Networking.operation(route: .fetchTrip, user: UserDefault.currentUser) { (data, resp) in
+            do{
+                guard let data = data else {return }
+                trip = try JSONDecoder().decode([Trip_Data].self, from: data)
+                UserDefault.currentUser?.trips = trip
+            }
+            catch{}
+        }
+       
     }
     
     func encode(to encoder: Encoder) throws {
@@ -67,11 +82,6 @@ struct Errors: Decodable{
     }
 }
 
-
-
-
-
-
 struct Trip_Data: Codable{
     let name : String?
     let destination : String?
@@ -89,19 +99,21 @@ struct Trip_Data: Codable{
         case trip_id
         case start_date
         case user
+        
     }
 }
 
 extension Trip_Data{
     
-    init(CreateBy user: UserData? = nil, name:String? = nil, destination:String? = nil, stop_point:[String]? = nil, status: Bool? = nil, startDate:String? = nil, tripID:String? = nil) {
+    init(UserEmail user: String? = nil, name:String? = nil, destination:String? = nil, stop_point:[String]? = nil, status: Bool? = nil, startDate:String? = nil, tripID:String? = nil) {
         self.name = name
         self.destination = destination
         self.tripID = tripID
         self.stopPoint = stop_point
         self.status = status
         self.startDate = startDate
-        self.user = user?.email
+        self.user = user
+        
     }
     init(from decoder: Decoder)throws{
         
@@ -112,9 +124,10 @@ extension Trip_Data{
         let start_date = try contenaire.decodeIfPresent(String.self, forKey: .start_date)
         let status = try contenaire.decodeIfPresent(Bool.self, forKey: .status)
          let tripID = try contenaire.decodeIfPresent(String.self, forKey: .trip_id)
-        // implement
+        let endPoint = try contenaire.decodeIfPresent([String].self, forKey: .stop_point)
         
-        self.init( name: name, destination: destination, status: status, startDate: start_date, tripID: tripID)
+        
+        self.init( UserEmail:user,name: name, destination: destination,stop_point:endPoint, status: status, startDate: start_date, tripID: tripID)
         
     }
 

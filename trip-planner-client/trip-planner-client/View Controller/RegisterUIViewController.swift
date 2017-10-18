@@ -36,30 +36,78 @@ class RegisterUIViewController: UIViewController {
     }
     @IBAction func loginTapped(_ sender: Any) {
         
+        _ = "send credential"
         
-        
+        //==> Login user
         if loginButton.titleLabel?.text == "Login"{
             
+            //  DispatchQueue.global().sync {
+            
+            
             let user = UserData(email: email.text, password: password.text)
+            UserDefault.currentUser = user
             
             Networking.operation(route: .fetchUser, user: user, completion: { (data, response) in
                 print(response)
+                
+                do{
+                    //==> decode the error message
+                    if response == 400 || response == 401 || response == 500{
+                        let errorMessage = try JSONDecoder().decode(Errors.self, from: data!)
+                        print (errorMessage.error! )
+                    }
+                    else{
+                    //==> decode user data
+                        let user = try JSONDecoder().decode(UserData.self, from: data!)
+                        UserDefault.currentUser?.firstName = user.firstName
+                        UserDefault.currentUser?.lastName = user.lastName
+                        UserDefault.currentUser?.userID = user.userID
+                        
+                        DispatchQueue.main.async {
+                            if UserDefault.currentUser != nil{
+                                self.performSegue(withIdentifier: "login", sender: self)
+                            }
+                        }
+                    }
+                    
+                }catch{}
             })
+            
+            
+            //DispatchQueue.main.sync {
+            
+      
+            
+            //}
+            //}
         }
+            //==> register user
         else {
             let user = UserData(email: email.text, password: password.text, firstName: fname.text, lastName: lname.text)
+            UserDefault.currentUser = user
             Networking.operation(route: .createUser, user: user, completion: { (data, response) in
                 print(response)
                 
                 do{
-                if response == 400 || response == 401{
-                    //let responseData = String(data: data!, encoding: String.Encoding.utf8)!
-                    let errorMessage = try JSONDecoder().decode(Errors.self, from: data!)
-                    print (errorMessage.error)
-                }
+                    if response == 400 || response == 401 || response == 500{
+                        
+                        let errorMessage = try JSONDecoder().decode(Errors.self, from: data!)
+                        print (errorMessage.error! )
+                        
+                    }
+                    else{
+                        let user = try JSONDecoder().decode(UserData.self, from: data!)
+                        UserDefault.currentUser = user
+                    }
+                    
                 }catch{}
             })
+            
+            if UserDefault.currentUser != nil{
+                performSegue(withIdentifier: "login", sender: nil)
+            }
         }
+        
         
     }
     
@@ -86,8 +134,4 @@ class RegisterUIViewController: UIViewController {
         }
         
     }
-    
-    
-    
-    
 }

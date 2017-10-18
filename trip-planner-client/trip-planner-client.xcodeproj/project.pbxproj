@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2029277F1F97210B005B7936 /* Notification center.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2029277E1F97210B005B7936 /* Notification center.swift */; };
+		202927811F97287B005B7936 /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202927801F97287B005B7936 /* HomePageViewController.swift */; };
+		202927841F972E29005B7936 /* TripsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202927831F972E29005B7936 /* TripsTableViewCell.swift */; };
+		202927861F9734F2005B7936 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202927851F9734F2005B7936 /* TableViewController.swift */; };
+		202927881F97EF1F005B7936 /* AddTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202927871F97EF1F005B7936 /* AddTripViewController.swift */; };
 		205000081F959354007DDF8F /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205000071F959354007DDF8F /* Networking.swift */; };
 		2050000A1F95A86D007DDF8F /* Support+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205000091F95A86D007DDF8F /* Support+Extension.swift */; };
 		20D44E6E1F90280E005F2C2B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D44E6D1F90280E005F2C2B /* AppDelegate.swift */; };
@@ -20,6 +25,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2029277E1F97210B005B7936 /* Notification center.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification center.swift"; sourceTree = "<group>"; };
+		202927801F97287B005B7936 /* HomePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
+		202927831F972E29005B7936 /* TripsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripsTableViewCell.swift; sourceTree = "<group>"; };
+		202927851F9734F2005B7936 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		202927871F97EF1F005B7936 /* AddTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTripViewController.swift; sourceTree = "<group>"; };
 		205000071F959354007DDF8F /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		205000091F95A86D007DDF8F /* Support+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Support+Extension.swift"; sourceTree = "<group>"; };
 		20D44E6A1F90280E005F2C2B /* trip-planner-client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "trip-planner-client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,6 +55,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		202927821F972E0D005B7936 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				202927831F972E29005B7936 /* TripsTableViewCell.swift */,
+				202927851F9734F2005B7936 /* TableViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		20D44E611F90280D005F2C2B = {
 			isa = PBXGroup;
 			children = (
@@ -64,8 +83,10 @@
 		20D44E6C1F90280E005F2C2B /* trip-planner-client */ = {
 			isa = PBXGroup;
 			children = (
+				202927821F972E0D005B7936 /* View */,
 				20FEA5B41F9607E600172B8F /* View Controller */,
 				20D44E6D1F90280E005F2C2B /* AppDelegate.swift */,
+				2029277E1F97210B005B7936 /* Notification center.swift */,
 				20D44E6F1F90280E005F2C2B /* ViewController.swift */,
 				20D44E711F90280E005F2C2B /* Main.storyboard */,
 				20D44E741F90280E005F2C2B /* Assets.xcassets */,
@@ -83,6 +104,8 @@
 			isa = PBXGroup;
 			children = (
 				20FEA5B51F96084A00172B8F /* RegisterUIViewController.swift */,
+				202927801F97287B005B7936 /* HomePageViewController.swift */,
+				202927871F97EF1F005B7936 /* AddTripViewController.swift */,
 			);
 			path = "View Controller";
 			sourceTree = "<group>";
@@ -161,8 +184,13 @@
 			files = (
 				20D44E821F902A2E005F2C2B /* User.swift in Sources */,
 				2050000A1F95A86D007DDF8F /* Support+Extension.swift in Sources */,
+				202927811F97287B005B7936 /* HomePageViewController.swift in Sources */,
 				20FEA5B61F96084A00172B8F /* RegisterUIViewController.swift in Sources */,
+				202927841F972E29005B7936 /* TripsTableViewCell.swift in Sources */,
+				202927881F97EF1F005B7936 /* AddTripViewController.swift in Sources */,
 				205000081F959354007DDF8F /* Networking.swift in Sources */,
+				202927861F9734F2005B7936 /* TableViewController.swift in Sources */,
+				2029277F1F97210B005B7936 /* Notification center.swift in Sources */,
 				20D44E701F90280E005F2C2B /* ViewController.swift in Sources */,
 				20D44E6E1F90280E005F2C2B /* AppDelegate.swift in Sources */,
 				20D44E801F9029C7005F2C2B /* Network.swift in Sources */,

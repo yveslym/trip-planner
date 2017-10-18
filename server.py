@@ -8,6 +8,7 @@ from mongoengine import *
 import pdb
 import uuid
 from socket import *
+from cffi import FFI
 from basicauth import encode
 # from basicauth import decode import the decoder
 sock=socket()
@@ -60,7 +61,7 @@ class Trip(Resource):
         self.trip_id = uuid.uuid4().hex[:20]
 
     def post(self):
-        trip_collect = app.db.posts
+        trip_collect = app.db.trips
         trip_json = request.json
 
         name = request.json.get('name')
@@ -134,10 +135,11 @@ class User(Resource):
         self.country = ''
 
     def post(self):
+        # pdb.set_trace()
         user_json = request.json
         user_collect = app.db.users
 
-        #pdb.set_trace()
+
         user_email = user_json.get('email')
         password = user_json.get('password')
         first_name = user_json.get('first_name')
@@ -174,7 +176,7 @@ class User(Resource):
 
 
 
-    @user_auth
+    #@user_auth
     def get(self):
 
         auth = request.authorization
@@ -255,4 +257,4 @@ if __name__ == '__main__':
     # Turn this on in debug mode to get detailled information about request
     # related exceptions: http://flask.pocoo.org/docs/0.10/config/
     app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-    app.run(debug=True, port=8082)
+    app.run(debug=True, port=8083)

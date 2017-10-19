@@ -98,28 +98,28 @@ struct Trip_Data: Codable{
         case status
         case trip_id
         case start_date
-        case user
+        case user_id = "user_id"
         
     }
 }
 
 extension Trip_Data{
     
-    init(UserEmail user: String? = nil, name:String? = nil, destination:String? = nil, stop_point:[String]? = nil, status: Bool? = nil, startDate:String? = nil, tripID:String? = nil) {
+    init( name:String? = nil, destination:String? = nil, stop_point:[String]? = nil, status: Bool? = nil, startDate:String? = nil, tripID:String? = nil) {
         self.name = name
         self.destination = destination
         self.tripID = tripID
         self.stopPoint = stop_point
         self.status = status
         self.startDate = startDate
-        self.user = user
+        self.user = UserDefault.currentUser?.userID
         
     }
     init(from decoder: Decoder)throws{
         
         let contenaire = try decoder.container(keyedBy: tripKey.self)
         let name = try contenaire.decodeIfPresent(String.self, forKey: .name)
-        let user = try contenaire.decodeIfPresent(String.self, forKey: .user)
+        let user = try contenaire.decodeIfPresent(String.self, forKey: .user_id)
         let destination = try contenaire.decodeIfPresent(String.self, forKey: .destination)
         let start_date = try contenaire.decodeIfPresent(String.self, forKey: .start_date)
         let status = try contenaire.decodeIfPresent(Bool.self, forKey: .status)
@@ -127,8 +127,18 @@ extension Trip_Data{
         let endPoint = try contenaire.decodeIfPresent([String].self, forKey: .stop_point)
         
         
-        self.init( UserEmail:user,name: name, destination: destination,stop_point:endPoint, status: status, startDate: start_date, tripID: tripID)
+        self.init( name: name, destination: destination, stopPoint:endPoint, status: status, tripID: tripID, startDate: start_date, user:user)
         
+    }
+    
+   func encode(to encoder: Encoder) throws {
+    var contenaire = encoder.container(keyedBy: tripKey.self)
+    try contenaire.encode(name, forKey: .name)
+    try contenaire.encode(destination, forKey: .destination)
+    try contenaire.encode(startDate, forKey: .start_date)
+    try contenaire.encode(String(describing: status), forKey: .status)
+    try contenaire.encode(user, forKey: .user_id)
+    
     }
 
 }

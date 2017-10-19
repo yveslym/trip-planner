@@ -18,7 +18,7 @@ class AddTripViewController: UIViewController {
     
     @IBAction func addTrip(_ sender: Any) {
         
-        let trip = Trip_Data(UserEmail: UserDefault.currentUser?.email, name: name.text, destination: destiination.text, status: false, startDate: start_date.text)
+        let trip = Trip_Data(name: name.text, destination: destiination.text, status: false, startDate: start_date.text)
                     UserDefault.currentUser?.trips?.append(trip)
         
 //        Networking.operation(route:.createTrip, user: UserDefault.currentUser, trip: trip) {(data, resp) in

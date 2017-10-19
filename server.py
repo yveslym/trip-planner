@@ -61,12 +61,16 @@ class Trip(Resource):
         self.trip_id = uuid.uuid4().hex[:20]
 
     def post(self):
-        trip_collect = app.db.trips
-        trip_json = request.json
 
-        name = request.json.get('name')
-        destination = request.json.get('destination')
-        user = request.json.get('user_id')
+        trip_collect = app.db.trips
+        trip_json = request.args
+
+        name = request.args.get('name')
+        destination = request.args.get('destination')
+        user = request.args.get('user_id')
+
+        pdb.set_trace()
+        print(name+ " "+" "+destination+" "+user)
 
         if name is None or destination is None or user is None:
             return({'error':'trip name, destination, and user id are required to create a post'},400,None)
@@ -257,4 +261,4 @@ if __name__ == '__main__':
     # Turn this on in debug mode to get detailled information about request
     # related exceptions: http://flask.pocoo.org/docs/0.10/config/
     app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-    app.run(debug=True, port=8083)
+    app.run(debug=True, port=8084)

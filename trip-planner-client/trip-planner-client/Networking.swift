@@ -45,7 +45,7 @@ enum Route{
         case .createTrip:
             let param = ["name":trip?.name,
                          "destination":trip?.destination,
-                         "stop_point":trip?.stopPoint![0],
+                        // "stop_point":trip?.stopPoint![0],
                          "start_date":trip?.startDate]
             return param as? [String : String]
             
@@ -117,6 +117,7 @@ enum Route{
                 
                 do{
                     jsonBody = try JSONEncoder().encode(trip)
+                    
                 }catch{}
             }else{
                 print("the trip is nil,  need to pass a userData")
@@ -141,7 +142,7 @@ class Networking{
     static func operation(route:Route, user:UserData? = nil,trip: Trip_Data? = nil, completion: @escaping(Data?, Int)->Void){
         
         // 1. set the url path
-        let baseURL = "http://127.0.0.1:8083"
+        let baseURL = "http://127.0.0.1:8084"
         var url = URL(string: "\(baseURL)\(route.path())")
         
         // 2. check the urlparam condition
@@ -178,15 +179,32 @@ class Networking{
                 print("error")
                 print("here")
             }
-            
+            let statusCode = (response as! HTTPURLResponse).statusCode
+            if statusCode == 200 || statusCode == 201{
+                
                 guard let data = data else {return}
-                let statusCode = (response as! HTTPURLResponse).statusCode
                 return completion(data,statusCode)
-            
+            }
+            else{
+                print("error \(statusCode)")
+                Networking.debugError(error: data!)
+            }
         
         }
         task.resume()
     }
+    
+   static func debugError(error: Data){
+        
+        do{
+            let errorMessage = try JSONDecoder().decode(Errors.self, from: error)
+            if errorMessage.error != nil{
+            print (errorMessage.error!)
+        }
+    }
+        catch{}
+    }
+
 }
 struct BasicAuth {
     static func generateBasicAuthHeader(user:UserData) -> String {
@@ -198,6 +216,8 @@ struct BasicAuth {
         return authHeaderString
     }
 }
+
+
 
 
 

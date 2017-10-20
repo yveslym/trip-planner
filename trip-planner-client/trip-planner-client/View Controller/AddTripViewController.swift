@@ -18,26 +18,15 @@ class AddTripViewController: UIViewController {
     
     @IBAction func addTrip(_ sender: Any) {
         
-        let trip = Trip_Data(name: name.text, destination: destiination.text, status: false, startDate: start_date.text)
-                    UserDefault.currentUser?.trips?.append(trip)
+    let trip = Trip_Data(name: name.text, destination: destiination.text, status: false, startDate: start_date.text)
         
-//        Networking.operation(route:.createTrip, user: UserDefault.currentUser, trip: trip) {(data, resp) in
-//            print(resp)
+        //==> post new trip
+        
         Networking.operation(route: .createTrip, user: UserDefault.currentUser,trip: trip ,completion: { (data, response) in
             print(response)
-            
-            guard let data = data else{return}
-            do{
-            let newTrip = try JSONDecoder().decode(Trip_Data.self, from: data)
-            
-            UserDefault.currentUser?.trips?.append(newTrip)
-        
-            }
-            catch {}
         })
-    }
-    
-    
+
+}
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -49,15 +38,5 @@ class AddTripViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

@@ -8,13 +8,15 @@
 
 import Foundation
 
+//==> user model
+
 struct UserData: Codable {
     var firstName: String?
     var lastName: String?
     var email: String?
     var password:String?
     var credential: String?
-    var trips: [Trip_Data]?
+    var myTrips: [Trip_Data]?
     var userID: String?
     
     enum userKey:String,CodingKey{
@@ -34,19 +36,24 @@ extension UserData {
         self.lastName = (try contenaire.decodeIfPresent(String.self, forKey: .last_name))!
         self.userID = (try contenaire.decodeIfPresent(String.self, forKey: ._id))
         self.password = ""
-        var trip = [Trip_Data]()
-        self.trips = nil
+        self.credential = UserDefault.currentUser?.credential
         
-        Networking.operation(route: .fetchTrip, user: UserDefault.currentUser) { (data, resp) in
-            do{
-                guard let data = data else {return }
-                trip = try JSONDecoder().decode([Trip_Data].self, from: data)
-                UserDefault.currentUser?.trips = trip
-            }
-            catch{}
-        }
-       
+        UserDefault.currentUser = self
+        //==> fetching user trip
+        
+//            Networking.operation(route: .fetchTrip, user: self) { (data, resp) in
+//
+//                do{
+//                    guard let data = data else {return}
+//                    let list = try JSONDecoder().decode(ListOfTrip?.self, from: data)
+//
+//                    guard let trips = list else{return}
+//                    UserDefault.currentUser?.myTrips = trips
+//                }
+//                catch{}
+//        }
     }
+    
     
     func encode(to encoder: Encoder) throws {
         var contenaire = encoder.container(keyedBy: userKey.self)
@@ -65,22 +72,6 @@ extension UserData {
     }
 }
 
-struct Errors: Decodable{
-    var error:String?
-    
-    init (error: String?){
-        self.error = error
-    }
-    
-    enum errorKey:String, CodingKey {
-        case error
-    }
-    init(from decoder:Decoder)throws {
-        let contenaire = try decoder.container(keyedBy: errorKey.self)
-        let err = (try contenaire.decodeIfPresent(String.self, forKey: .error)) 
-        self.init(error: err)
-    }
-}
 
 struct Trip_Data: Codable{
     let name : String?
@@ -96,12 +87,14 @@ struct Trip_Data: Codable{
         case destination
         case stop_point
         case status
-        case trip_id
+        case _id
         case start_date
         case user_id = "user_id"
         
     }
 }
+
+//==> Trip model
 
 extension Trip_Data{
     
@@ -122,9 +115,9 @@ extension Trip_Data{
         let user = try contenaire.decodeIfPresent(String.self, forKey: .user_id)
         let destination = try contenaire.decodeIfPresent(String.self, forKey: .destination)
         let start_date = try contenaire.decodeIfPresent(String.self, forKey: .start_date)
-        let status = try contenaire.decodeIfPresent(Bool.self, forKey: .status)
-         let tripID = try contenaire.decodeIfPresent(String.self, forKey: .trip_id)
-        let endPoint = try contenaire.decodeIfPresent([String].self, forKey: .stop_point)
+        let status = false//try contenaire.decodeIfPresent(Bool.self, forKey: .status)
+         let tripID = try contenaire.decodeIfPresent(String.self, forKey: ._id)
+        let endPoint:[String]? = nil// try contenaire.decodeIfPresent([String].self, forKey: .stop_point)
         
         
         self.init( name: name, destination: destination, stopPoint:endPoint, status: status, tripID: tripID, startDate: start_date, user:user)
@@ -142,7 +135,38 @@ extension Trip_Data{
     }
 
 }
+//==> Error code
 
+struct Errors: Decodable{
+    var error:String?
+    
+    init (error: String?){
+        self.error = error
+    }
+    
+    enum errorKey:String, CodingKey {
+        case error
+    }
+    init(from decoder:Decoder)throws {
+        let contenaire = try decoder.container(keyedBy: errorKey.self)
+        let err = (try contenaire.decodeIfPresent(String.self, forKey: .error))
+        self.init(error: err)
+    }
+}
+
+struct ListOfTrip:Decodable{
+    
+    var trips: [Trip_Data]?
+}
+
+
+//==> Networking Error
+
+enum NetworkError: String{
+    
+    case Notrip = "Could'nt retrieve trip from data base"
+    case noUserInDatabase = " not such user in the database"
+}
 
 
 

@@ -1,23 +1,28 @@
 from flask import Flask, request, make_response
 from flask_restful import Resource, Api
 from pymongo import MongoClient
-from utils.mongo_json_encoder import JSONEncoder
 from bson.objectid import ObjectId
 import bcrypt
-from mongoengine import *
+import json
+from CustomClass import JSONEncoder
+from flask import jsonify
 import pdb
+from bson import BSON
+from bson import json_util
+from basicauth import decode
+from bson.json_util import dumps
 import uuid
-from socket import *
-from cffi import FFI
-from basicauth import encode
+#from socket import *
+#from cffi import FFI
+#from basicauth import encode
 # from basicauth import decode import the decoder
-sock=socket()
-sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+#sock=socket()
+#sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 
 app = Flask(__name__)
 mongo = MongoClient('localhost', 27017)
 app.db = mongo.trip_planner_test
-rounds = app.bcrypt_rounds = 12
+rounds = app.bcrypt_rounds = 8
 api = Api(app)
 
 
@@ -38,7 +43,7 @@ def user_auth(func):
 
             if user is not None:
                 encoded_pw = password.encode("utf-8")
-                
+
                 #pdb.set_trace()
                 if bcrypt.checkpw(encoded_pw, user['password']):
                     return func (*args,**kwargs)
@@ -63,58 +68,38 @@ class Trip(Resource):
     def post(self):
 
         trip_collect = app.db.trips
-        trip_json = request.args
+        trip_json = request.json
 
-        name = request.args.get('name')
-        destination = request.args.get('destination')
-        user = request.args.get('user_id')
+        name = request.json.get('name')
+        destination = request.json.get('destination')
+        user = request.json.get('user_id')
 
-        pdb.set_trace()
-        print(name+ " "+" "+destination+" "+user)
+        #pdb.set_trace()
+        #print(name+ " "+" "+destination+" "+user)
 
         if name is None or destination is None or user is None:
             return({'error':'trip name, destination, and user id are required to create a post'},400,None)
         else:
-            app.db.trips.insert_one(trip_json)
+            trip_collect.insert_one(trip_json)
             return (trip_json,200,None)
 
     def get(self):
 
+        #pdb.set_trace()
+        user_id = request.args.getlist('user_id')
 
-        user_id = request.args.get('user_id')
-
+        trips_col = app.db.trips
         if user_id is not None:
-            trip_dict = app.db.trips.find({'user_id':user_id})
-
+            trip_dict = trips_col.find({'user_id':user_id[0]})
 
             if trip_dict is not None:
                 arr = []
                 for trip in trip_dict:
                     arr.append(trip)
-
+                    json.dumps(arr, default=json_util.default)
                 return(arr,200,None)
             else:
                 return({'error':' No trip found the user and trip name argument given'},400,None)
-        #check if there's trip with current user Reference
-        # elif request.args.get('user_id') is not None:
-        #
-        #     trip_dict = app.db.trips
-        #
-        #     trip_dict.find_one({'user_id':request.args.get('user_id')})
-        #
-        #     # if trip_dict is not None:
-        #     #     arr = []
-        #     #     for trip in trip_dict:
-        #     #         arr.append(trip)
-        #     return(trip_dict,200,None)
-
-        # else:
-        #     return({'error':' No trip found for the current user'},400,None)
-
-
-        # else:
-        #     return({'error':' No argument have been passed, enter either user reference or user reference and trip name'},400,None)
-
 
     def delete(self):
 
@@ -261,4 +246,4 @@ if __name__ == '__main__':
     # Turn this on in debug mode to get detailled information about request
     # related exceptions: http://flask.pocoo.org/docs/0.10/config/
     app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-    app.run(debug=True, port=8084)
+    app.run(debug=True, port=8087)

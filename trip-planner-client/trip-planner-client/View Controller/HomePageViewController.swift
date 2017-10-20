@@ -10,9 +10,13 @@ import UIKit
 
 class HomePageViewController: UIViewController {
 
+    @IBOutlet weak var mytable: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        mytable.delegate = self
+        mytable.dataSource = self
+        
         // Do any additional setup after loading the view.
     }
     @IBAction func AddTrip(_ sender: Any) {
@@ -24,15 +28,50 @@ class HomePageViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+//        Networking.operation(route: .fetchTrip, user: UserDefault.currentUser) { (data, resp) in
+//
+//            do{
+//                guard let data = data else {return}
+//                let list = try JSONDecoder().decode(ListOfTrip?.self, from: data)
+//                guard let trips = list else{return}
+//
+//                UserDefault.currentUser?.myTrips = trips
+//                self.mytable.reloadData()
+//            }
+//
+//            catch{}
+//        }
+        Networking.operation(route: .fetchTrip, user: UserDefault.currentUser) { (data, resp) in
+            
+            do{
+                guard let data = data else {return}
+                let list = try JSONDecoder().decode([Trip_Data]?.self, from: data)
+                guard let trips = list else{return}
+                
+                print(trips)
+                
+                DispatchQueue.main.async {
+                    UserDefault.currentUser?.myTrips = trips
+                    self.mytable.reloadData()
+                }
+                
+            }
+                
+            catch{}
+        }
+        
+    }
 }
 
 
 
 
 extension HomePageViewController: UITableViewDelegate,UITableViewDataSource{
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if UserDefault.currentUser?.trips != nil{
-        return (UserDefault.currentUser?.trips!.count)!
+        if UserDefault.currentUser?.myTrips != nil{
+            return (UserDefault.currentUser?.myTrips?.count)!
        }
         else {return 0}
     }
@@ -40,7 +79,7 @@ extension HomePageViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TripsTableViewCell
-        let trip = UserDefault.currentUser?.trips![indexPath.row]
+        let trip = UserDefault.currentUser?.myTrips![indexPath.row]
         cell.startDate.text = trip?.startDate
         cell.tripName.text = trip?.name
         cell.destination.text = trip?.destination

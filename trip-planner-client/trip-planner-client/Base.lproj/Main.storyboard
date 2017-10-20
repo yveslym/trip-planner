@@ -246,60 +246,46 @@
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6u3-GM-aN0">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="402"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="116" id="rks-yr-XIk" customClass="TripsTableViewCell" customModule="trip_planner_client" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="28" width="375" height="116"/>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailButton" indentationWidth="10" reuseIdentifier="cell" rowHeight="36" id="rks-yr-XIk" customClass="TripsTableViewCell" customModule="trip_planner_client" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="28" width="375" height="36"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rks-yr-XIk" id="Oj5-xl-Og4">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="115.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="328" height="35.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trip Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cgF-o4-ZFH">
-                                                            <rect key="frame" x="131" y="8" width="79" height="21"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="21" id="YfH-Cc-jRJ"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Destination" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2kn-OQ-wf3">
-                                                            <rect key="frame" x="16" y="47" width="87" height="21"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="21" id="lo7-0i-mtm"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ckh-pH-a7z">
-                                                            <rect key="frame" x="299" y="8" width="47.5" height="21"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Trip Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cgF-o4-ZFH">
+                                                            <rect key="frame" x="0.0" y="7" width="84" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <color key="textColor" red="0.50196081400000003" green="0.0" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="start date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="907-32-MDp">
-                                                            <rect key="frame" x="16" y="64" width="163" height="21"/>
+                                                            <rect key="frame" x="162" y="7" width="84" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
-                                                            <nil key="textColor"/>
+                                                            <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="14"/>
+                                                            <color key="textColor" red="0.50196081400000003" green="0.0" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Destination" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2kn-OQ-wf3">
+                                                            <rect key="frame" x="87" y="7" width="75" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <color key="textColor" red="0.50196081400000003" green="0.0" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ckh-pH-a7z">
+                                                            <rect key="frame" x="258" y="7" width="70" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <color key="textColor" red="0.50196081400000003" green="0.0" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
-                                                    <constraints>
-                                                        <constraint firstItem="2kn-OQ-wf3" firstAttribute="leading" secondItem="Oj5-xl-Og4" secondAttribute="leadingMargin" constant="8" id="8tn-S2-RA3"/>
-                                                        <constraint firstAttribute="trailing" secondItem="ckh-pH-a7z" secondAttribute="trailing" constant="28.5" id="9FC-Vf-vHa"/>
-                                                        <constraint firstItem="2kn-OQ-wf3" firstAttribute="centerY" secondItem="Oj5-xl-Og4" secondAttribute="centerY" id="AVa-k7-uSE"/>
-                                                        <constraint firstItem="ckh-pH-a7z" firstAttribute="centerY" secondItem="cgF-o4-ZFH" secondAttribute="centerY" id="ChL-EE-Zhm"/>
-                                                        <constraint firstItem="cgF-o4-ZFH" firstAttribute="top" secondItem="Oj5-xl-Og4" secondAttribute="top" constant="8" id="LTZ-jr-3gR"/>
-                                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="2kn-OQ-wf3" secondAttribute="trailingMargin" id="VIg-dB-bpa"/>
-                                                        <constraint firstItem="cgF-o4-ZFH" firstAttribute="leading" secondItem="Oj5-xl-Og4" secondAttribute="leading" constant="131" id="gyM-sb-jcO"/>
-                                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cgF-o4-ZFH" secondAttribute="trailing" id="gzN-ES-FJ8"/>
-                                                        <constraint firstItem="ckh-pH-a7z" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cgF-o4-ZFH" secondAttribute="trailing" constant="8" symbolic="YES" id="m8p-yi-FhU"/>
-                                                    </constraints>
                                                 </tableViewCellContentView>
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <connections>
                                                     <outlet property="destination" destination="2kn-OQ-wf3" id="0u2-0Z-3Ib"/>
                                                     <outlet property="startDate" destination="907-32-MDp" id="dGh-03-W5N"/>
@@ -315,12 +301,46 @@
                                         </connections>
                                     </tableView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="6u3-GM-aN0" firstAttribute="leading" secondItem="zsU-hv-IlE" secondAttribute="leading" id="2YH-78-zGA"/>
+                                    <constraint firstItem="6u3-GM-aN0" firstAttribute="top" secondItem="zsU-hv-IlE" secondAttribute="top" id="44g-5K-wrH"/>
+                                    <constraint firstAttribute="trailing" secondItem="6u3-GM-aN0" secondAttribute="trailing" id="kI0-Wc-oiQ"/>
+                                    <constraint firstAttribute="bottom" secondItem="6u3-GM-aN0" secondAttribute="bottom" id="rlf-8l-95o"/>
+                                </constraints>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="My Trips" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="skZ-0W-KZa">
                                 <rect key="frame" x="69" y="105" width="236" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Trip Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="INu-lt-WGD">
+                                <rect key="frame" x="0.0" y="222" width="84" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qir-T8-ljO">
+                                <rect key="frame" x="278" y="222" width="70" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Destination" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vdl-QE-rKE">
+                                <rect key="frame" x="87" y="222" width="86" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="start date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cvm-Ph-moA">
+                                <rect key="frame" x="181" y="222" width="84" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -340,12 +360,13 @@
                     <navigationItem key="navigationItem" id="hdl-6V-VoH">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="ZCz-Oc-X1T">
                             <connections>
-                                <action selector="AddTrip:" destination="T9e-rV-mYp" id="v6Z-YD-5JC"/>
+                                <action selector="AddTrip:" destination="T9e-rV-mYp" id="G4R-rF-8DH"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="Olf-He-6gd" kind="show" identifier="add" id="3Ka-8a-bbt"/>
+                        <outlet property="mytable" destination="6u3-GM-aN0" id="mcG-sA-Rye"/>
+                        <segue destination="Olf-He-6gd" kind="show" id="3Ka-8a-bbt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aty-lo-C0O" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -413,9 +434,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                 <state key="normal" title="Enter"/>
-                                <connections>
-                                    <action selector="addTrip:" destination="Olf-He-6gd" eventType="touchUpInside" id="KDS-8O-OPy"/>
-                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="New Trip" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IwR-ty-xpn">
                                 <rect key="frame" x="27" y="96" width="332" height="71"/>
@@ -434,11 +452,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="udy-tJ-pVY"/>
                     </view>
-                    <connections>
-                        <outlet property="destiination" destination="kZi-ud-7Z1" id="hPi-lR-3u6"/>
-                        <outlet property="name" destination="zPA-00-T9q" id="JCy-gt-57W"/>
-                        <outlet property="start_date" destination="1Lo-SV-NeT" id="13g-Qx-HpA"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SFg-s1-V4R" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="8aM-en-0jo" userLabel="Exit" sceneMemberID="exit"/>

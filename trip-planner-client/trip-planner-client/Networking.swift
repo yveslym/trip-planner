@@ -18,16 +18,18 @@ enum Route{
     
     //==> operation 1. function to pass the the path base on the case requieremnent
     
-    func path()->String{
+    func path()->String?{
         switch self {
         case .createUser: fallthrough
         case .fetchUser: fallthrough
         case .deleteUser:
-            return "/users"
-        case .fetchTrip: fallthrough
+            return "users"
+        
         case .createTrip: fallthrough
         case .deleteTrip:
-            return "/trips"
+            return "trips"
+        
+        case .fetchTrip: return "trips"
         }
     }
     //==> operation 2. function to get the url param base on case requierement
@@ -43,13 +45,12 @@ enum Route{
             return param as? [String : String]
             
         case .createTrip:
-            let param = ["name":trip?.name,
-                         "destination":trip?.destination,
-                        // "stop_point":trip?.stopPoint![0],
-                         "start_date":trip?.startDate]
-            return param as? [String : String]
+            return nil
             
-        case .fetchTrip: fallthrough
+        case .fetchTrip:
+          let param = ["user_id":user?.userID]
+          return param as? [String : String]
+            
         case .fetchUser: fallthrough
         case .deleteUser:
             return nil
@@ -65,8 +66,13 @@ enum Route{
             return ["content-type":"application/json"]
         case .deleteTrip: fallthrough
         case .deleteUser: fallthrough
-        case .fetchTrip: fallthrough
+        
         case .fetchUser:
+            return ["content-type":"application/json",
+                    "Authorization":(user?.credential)!]
+        
+        case .fetchTrip:
+            
             return ["content-type":"application/json",
                     "Authorization":(user?.credential)!]
         }
@@ -91,9 +97,8 @@ enum Route{
     func jsonBody(user:UserData? = nil, trip: Trip_Data? = nil)->Data?{
         
         switch self {
+       
         case .createUser:
-            
-            
             var jsonBody = Data()
             
             //return nil just in case we didn't pass the user when creating new one
@@ -112,12 +117,12 @@ enum Route{
         case .createTrip: fallthrough
         case .deleteTrip:
             var jsonBody = Data()
-            
+
             if trip != nil{
-                
+
                 do{
                     jsonBody = try JSONEncoder().encode(trip)
-                    
+
                 }catch{}
             }else{
                 print("the trip is nil,  need to pass a userData")
@@ -142,9 +147,11 @@ class Networking{
     static func operation(route:Route, user:UserData? = nil,trip: Trip_Data? = nil, completion: @escaping(Data?, Int)->Void){
         
         // 1. set the url path
-        let baseURL = "http://127.0.0.1:8084"
-        var url = URL(string: "\(baseURL)\(route.path())")
-        
+        let baseURL = "http://127.0.0.1:8087/"
+        var url = URL(string: baseURL)
+        if route.path() != nil{
+         url = URL(string: "\(baseURL)\(route.path()!)")
+        }
         // 2. check the urlparam condition
         
         if user != nil && route.URLparameters(user:user) != nil{
@@ -168,7 +175,8 @@ class Networking{
         
         // 5. check for the json body
         
-        if route.jsonBody(user: user, trip: trip) == nil{
+        if route.jsonBody(user: user, trip: trip) != nil{
+            
             request.httpBody = route.jsonBody(user: user, trip: trip)
         }
         

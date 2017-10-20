@@ -41,7 +41,6 @@ class RegisterUIViewController: UIViewController {
         //==> Login user
         if loginButton.titleLabel?.text == "Login"{
             
-            //  DispatchQueue.global().sync {
             
             
             let user = UserData(email: email.text, password: password.text)
@@ -57,7 +56,7 @@ class RegisterUIViewController: UIViewController {
                         print (errorMessage.error! )
                     }
                     else{
-                    //==> decode user data
+                        //==> decode user data
                         let user = try JSONDecoder().decode(UserData.self, from: data!)
                         UserDefault.currentUser?.firstName = user.firstName
                         UserDefault.currentUser?.lastName = user.lastName
@@ -72,14 +71,6 @@ class RegisterUIViewController: UIViewController {
                     
                 }catch{}
             })
-            
-            
-            //DispatchQueue.main.sync {
-            
-      
-            
-            //}
-            //}
         }
             //==> register user
         else {
@@ -88,27 +79,28 @@ class RegisterUIViewController: UIViewController {
             Networking.operation(route: .createUser, user: user, completion: { (data, response) in
                 print(response)
                 
+                //==> catch the server error message if any
                 do{
-                    if response == 400 || response == 401 || response == 500{
+                    if response == 400 || response == 401 {
                         
                         let errorMessage = try JSONDecoder().decode(Errors.self, from: data!)
                         print (errorMessage.error! )
                         
                     }
+                        //==> deserilization of data
                     else{
                         let user = try JSONDecoder().decode(UserData.self, from: data!)
                         UserDefault.currentUser = user
                     }
                     
+                    DispatchQueue.main.async {
+                        if UserDefault.currentUser != nil{
+                            self.performSegue(withIdentifier: "login", sender: self)
+                        }
+                    }
                 }catch{}
             })
-            
-            if UserDefault.currentUser != nil{
-                performSegue(withIdentifier: "login", sender: nil)
-            }
         }
-        
-        
     }
     
     @IBAction func registerTapped(_ sender: Any) {

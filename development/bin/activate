@@ -39,7 +39,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/yveslym/Desktop/portfolio/MOB2/trip-planner/development"
+VIRTUAL_ENV="/Users/yveslym/Documents/trip-planner/development"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

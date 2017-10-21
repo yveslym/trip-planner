@@ -1,20 +1,16 @@
 from flask import Flask, request, make_response
 from flask_restful import Resource, Api
 from pymongo import MongoClient
-from bson.objectid import ObjectId
+# from bson.objectid import ObjectId
 import bcrypt
 import json
 from CustomClass import JSONEncoder
 from flask import jsonify
 import pdb
-from bson import BSON
 from bson import json_util
-#from basicauth import decode
-from bson.json_util import dumps
+# from bson.json_util import dumps
 import uuid
-from socket import *
-from cffi import FFI
-from basicauth import encode, decode
+# from basicauth import encode, decode
 
 # from basicauth import decode import the decoder
 #sock=socket()
@@ -164,7 +160,7 @@ class User(Resource):
 
             # encrypt the password
             encoded_password = password.encode('utf-8')
-           # pdb.set_trace()
+            # pdb.set_trace()
             hashed = bcrypt.hashpw(encoded_password, bcrypt.gensalt(rounds))
             user_json['password'] = hashed
 

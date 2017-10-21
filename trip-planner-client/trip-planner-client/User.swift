@@ -117,7 +117,7 @@ extension Trip_Data{
         let start_date = try contenaire.decodeIfPresent(String.self, forKey: .start_date)
         let status = false//try contenaire.decodeIfPresent(Bool.self, forKey: .status)
          let tripID = try contenaire.decodeIfPresent(String.self, forKey: ._id)
-        let endPoint:[String]? = nil// try contenaire.decodeIfPresent([String].self, forKey: .stop_point)
+        let endPoint:[String]? = try contenaire.decodeIfPresent([String].self, forKey: .stop_point)
         
         
         self.init( name: name, destination: destination, stopPoint:endPoint, status: status, tripID: tripID, startDate: start_date, user:user)
@@ -168,7 +168,9 @@ enum NetworkError: String{
     case noUserInDatabase = " not such user in the database"
 }
 
-
+protocol TripProtocol:class {
+    func passTrip(trip:Trip_Data?)
+}
 
 
 

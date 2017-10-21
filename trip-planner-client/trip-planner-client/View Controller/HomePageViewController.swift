@@ -10,6 +10,8 @@ import UIKit
 
 class HomePageViewController: UIViewController {
 
+    
+    weak var tripDelegate: TripProtocol?
     @IBOutlet weak var mytable: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +71,10 @@ class HomePageViewController: UIViewController {
 
 extension HomePageViewController: UITableViewDelegate,UITableViewDataSource{
     
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         if UserDefault.currentUser?.myTrips != nil{
             return (UserDefault.currentUser?.myTrips?.count)!
        }
@@ -92,6 +97,38 @@ extension HomePageViewController: UITableViewDelegate,UITableViewDataSource{
 
         return cell
     }
-    
+     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tripDelegate?.passTrip(trip: UserDefault.currentUser?.myTrips![indexPath.row])
+    }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

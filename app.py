@@ -12,9 +12,10 @@ from bson import json_util
 #from basicauth import decode
 from bson.json_util import dumps
 import uuid
-#from socket import *
-#from cffi import FFI
-#from basicauth import encode
+from socket import *
+from cffi import FFI
+from basicauth import encode, decode
+
 # from basicauth import decode import the decoder
 #sock=socket()
 #sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
@@ -116,6 +117,16 @@ class Trip(Resource):
             return ({'delete':'Trip  as been deleted'}, 200, None)
 
 
+    def patch(self):
+
+        json_data = request.json
+
+        user_id = json_data.get('user_id')
+
+        #if user_id is not None:
+
+
+
 class User(Resource):
     def __init__(self):
         self.first_name = ''  # StringField(required=True, max_length=30)
@@ -153,7 +164,7 @@ class User(Resource):
 
             # encrypt the password
             encoded_password = password.encode('utf-8')
-            pdb.set_trace()
+           # pdb.set_trace()
             hashed = bcrypt.hashpw(encoded_password, bcrypt.gensalt(rounds))
             user_json['password'] = hashed
 
@@ -178,7 +189,7 @@ class User(Resource):
         return (user, 200, None)
 
 
-    @user_auth
+    #@user_auth
     def delete(self):
 
         # pdb.set_trace()
@@ -186,7 +197,7 @@ class User(Resource):
 
         auth = request.authorization
 
-        email_json, password = decode(auth_code)
+        email_json, password =  decode(auth_code)
 
         user_dict = app.db.users.find_one({'email':auth.username})
         app.db.users.remove(user_dict)
@@ -249,4 +260,4 @@ if __name__ == '__main__':
     # Turn this on in debug mode to get detailled information about request
     # related exceptions: http://flask.pocoo.org/docs/0.10/config/
     app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-    app.run(debug=True, port=8087)
+    app.run(debug=True, port=8088)

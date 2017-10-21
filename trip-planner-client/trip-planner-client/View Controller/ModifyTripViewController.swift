@@ -27,8 +27,6 @@ class ModifyTripViewController: UIViewController {
     @IBAction func displayTextField(_ sender: Any) {
         self.addTextField.isHidden = false
         
-        
-        
         self.reloadInputViews()
     }
     
@@ -67,10 +65,8 @@ extension ModifyTripViewController: UITableViewDelegate,UITableViewDataSource, T
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
          let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ListOfStopPointTableViewCell
         cell.stopPoint.text = myTrip?.stopPoint![indexPath.row]
-    
     return cell
     }
-    
     //==> get the data from tripProtocol
 }
 

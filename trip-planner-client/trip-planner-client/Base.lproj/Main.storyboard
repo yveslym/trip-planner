@@ -366,7 +366,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="mytable" destination="6u3-GM-aN0" id="mcG-sA-Rye"/>
-                        <segue destination="Olf-He-6gd" kind="show" id="3Ka-8a-bbt"/>
+                        <segue destination="Olf-He-6gd" kind="show" identifier="add" id="3Ka-8a-bbt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aty-lo-C0O" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -20,11 +20,8 @@ enum Route{
     
     func path()->String?{
         switch self {
-        case .createUser: fallthrough
-        case .fetchUser: fallthrough
-        case .deleteUser:
+        case .deleteUser, .fetchUser, .createUser:
             return "users"
-        
         case .createTrip: fallthrough
         case .deleteTrip:
             return "trips"

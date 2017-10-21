@@ -9,7 +9,7 @@ from flask import jsonify
 import pdb
 from bson import BSON
 from bson import json_util
-from basicauth import decode
+#from basicauth import decode
 from bson.json_util import dumps
 import uuid
 #from socket import *
@@ -21,6 +21,8 @@ import uuid
 
 app = Flask(__name__)
 mongo = MongoClient('localhost', 27017)
+app.config.from_pyfile('config.cfg')
+# mongo = MongoClient(app.config['MONGO_CLIENT'])
 app.db = mongo.trip_planner_test
 rounds = app.bcrypt_rounds = 8
 api = Api(app)
@@ -124,7 +126,7 @@ class User(Resource):
         self.country = ''
 
     def post(self):
-        # pdb.set_trace()
+
         user_json = request.json
         user_collect = app.db.users
 
@@ -151,6 +153,7 @@ class User(Resource):
 
             # encrypt the password
             encoded_password = password.encode('utf-8')
+            pdb.set_trace()
             hashed = bcrypt.hashpw(encoded_password, bcrypt.gensalt(rounds))
             user_json['password'] = hashed
 

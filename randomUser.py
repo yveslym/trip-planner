@@ -1,6 +1,6 @@
-import server
-from server import Trip
-from server import User
+import app
+from app import Trip
+from app import User
 import random
 from random import randint
 import string

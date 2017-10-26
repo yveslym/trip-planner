@@ -13,9 +13,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    func didEverLogin(){
+        
+         self.window = UIWindow(frame:UIScreen.main.bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        // ==> if ever login before send tto the home page
+        if UserDefaults.standard.bool(forKey: "everLogin"){
+            print("welcome back")
+            let homeViewController = storyboard.instantiateViewController(withIdentifier: "homevc")
+            self.window?.rootViewController = homeViewController
+            self.window?.makeKeyAndVisible()
+        }
+            //==> else login send to the register vc
+        else{
+            let registerVC = storyboard.instantiateViewController(withIdentifier: "registervc")
+            self.window?.rootViewController = registerVC
+            self.window?.makeKeyAndVisible()
+        }
+    }
+    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        self.didEverLogin()
+        
         return true
     }
 

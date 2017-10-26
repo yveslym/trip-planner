@@ -63,7 +63,7 @@ class Trip(Resource):
         self.start_date = ''
         self.user_id = ''
         self.trip_id = uuid.uuid4().hex[:20]
-
+    @user_auth
     def post(self):
 
         trip_collect = app.db.trips
@@ -81,15 +81,15 @@ class Trip(Resource):
         else:
             trip_collect.insert_one(trip_json)
             return (trip_json,200,None)
-
+    @user_auth
     def get(self):
 
         #pdb.set_trace()
-        user_id = request.args.getlist('user_id')
-
+        user_id = request.headers.get('user_id')
+        #pdb.set_trace()
         trips_col = app.db.trips
         if user_id is not None:
-            trip_dict = trips_col.find({'user_id':user_id[0]})
+            trip_dict = trips_col.find({'user_id':user_id})
 
             if trip_dict is not None:
                 arr = []
@@ -99,7 +99,7 @@ class Trip(Resource):
                 return(arr,200,None)
             else:
                 return({'error':' No trip found the user and trip name argument given'},400,None)
-
+    @user_auth
     def delete(self):
 
         #delete single trip with user_id
@@ -112,14 +112,23 @@ class Trip(Resource):
             app.db.posts.delete_one({'user_id':request.args.get('_id')})
             return ({'delete':'Trip  as been deleted'}, 200, None)
 
-
-    def patch(self):
+    @user_auth
+    def put(self):
 
         json_data = request.json
 
         user_id = json_data.get('user_id')
 
-        #if user_id is not None:
+        trip_col = app.db.trips
+        if request.json('destination') is not None:
+            dest = json('destination')
+            trip_col.find_one_and_update({'_id':user_id},{'destination':dest})
+        elif request.json('name') is not None:
+            name = request.json('name')
+            trip_col.find_one_and_update({'_id': user_id}, {'name': name})
+        elif request.json('stop_point') is not None:
+            stopP = request.json('stop_point')
+            #trip_col.find_one_and_update({'_id':user_id},{$push:{'end_point':stopP}})
 
 
 
@@ -175,7 +184,7 @@ class User(Resource):
 
 
 
-    #@user_auth
+    @user_auth
     def get(self):
 
         auth = request.authorization
@@ -185,46 +194,17 @@ class User(Resource):
         return (user, 200, None)
 
 
-    #@user_auth
+    @user_auth
     def delete(self):
 
         # pdb.set_trace()
         auth_code = request.headers['authorization']
 
         auth = request.authorization
-
-        email_json, password =  decode(auth_code)
-
         user_dict = app.db.users.find_one({'email':auth.username})
         app.db.users.remove(user_dict)
-        return ({'delete':'the user '+ email_json+ ' as been deleted'}, 200, None)
+        return ({'delete':'the user '+ auth.username+ ' as been deleted'}, 200, None)
 
-    # def patch(self):
-    #     user_email = request.arg.get('email')
-    #     user_json = request.json
-    #     if user_email is None:
-    #         return ({'error': 'user not found'}, 404, None)
-    #
-    #     user_collect = app.db.users
-    #     user_dict = user_collect.find_one({'email': user_email})
-    #
-    #     if 'first_name' in user_json is not None:
-    #         user_dict['first_name'] = user_json['first_name']
-    #     elif user_json['email'] is not None:
-    #         user_dict['email'] = user_json['email']
-    #     elif user_json['last_name'] is not None:
-    #         user_dict['last_name'] = user_json['last_name']
-    #     elif user_json['user_name'] is not None:
-    #         user_dict['username'] = user_json['username']
-    #     elif user_json['password'] is not None:
-    #         user_dict['password'] = user_json['password']
-    #     else:
-    #         return ({'error': 'no argument was passed to be save'}, 404, None)
-    #
-    #     user_collect.save(user_dict)
-    #     return (user_dict, 200, None)
-
-#function to authentificate user email and password
 
     def is_user_exist(self, email):
         user_collect = app.db.users

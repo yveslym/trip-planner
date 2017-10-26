@@ -183,6 +183,7 @@ class Networking{
             if error != nil{
                 print("error")
                 print("here")
+                return
             }
             let statusCode = (response as! HTTPURLResponse).statusCode
             if statusCode == 200 || statusCode == 201{

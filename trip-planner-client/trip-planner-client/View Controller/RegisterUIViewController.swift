@@ -64,6 +64,7 @@ class RegisterUIViewController: UIViewController {
                         
                         DispatchQueue.main.async {
                             if UserDefault.currentUser != nil{
+                                 UserDefaults.standard.set(true, forKey: "everLogin")
                                 self.performSegue(withIdentifier: "login", sender: self)
                             }
                         }
@@ -95,6 +96,7 @@ class RegisterUIViewController: UIViewController {
                     
                     DispatchQueue.main.async {
                         if UserDefault.currentUser != nil{
+                            UserDefaults.standard.set(true, forKey: "everLogin")
                             self.performSegue(withIdentifier: "login", sender: self)
                         }
                     }

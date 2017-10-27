@@ -58,7 +58,10 @@ enum Route{
     
     func headers(user:UserData? = nil) -> [String:String] {
         switch self {
-        case .createTrip: fallthrough
+        case .createTrip, .fetchTrip:
+            return ["content-type":"application/json",
+                    "user_id":(user?.userID)!,
+                    "Authorization":(user?.credential)!]
         case .createUser:
             return ["content-type":"application/json"]
         case .deleteTrip: fallthrough
@@ -68,10 +71,6 @@ enum Route{
             return ["content-type":"application/json",
                     "Authorization":(user?.credential)!]
         
-        case .fetchTrip:
-            
-            return ["content-type":"application/json",
-                    "Authorization":(user?.credential)!]
         }
     }
     
@@ -144,7 +143,7 @@ class Networking{
     static func operation(route:Route, user:UserData? = nil,trip: Trip_Data? = nil, completion: @escaping(Data?, Int)->Void){
         
         // 1. set the url path
-        let baseURL = "http://127.0.0.1:8087/"
+        let baseURL = "http://127.0.0.1:8089/"
         var url = URL(string: baseURL)
         if route.path() != nil{
          url = URL(string: "\(baseURL)\(route.path()!)")
@@ -218,7 +217,6 @@ struct BasicAuth {
         let loginData: Data = loginString.data(using: String.Encoding.utf8)!
         let base64LoginString = loginData.base64EncodedString(options: .init(rawValue: 0))
         let authHeaderString = "Basic \(base64LoginString)"
-        
         return authHeaderString
     }
 }

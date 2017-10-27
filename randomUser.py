@@ -1,4 +1,4 @@
-import app
+oimport app
 from app import Trip
 from app import User
 import random

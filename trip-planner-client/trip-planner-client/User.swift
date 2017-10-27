@@ -36,22 +36,16 @@ extension UserData {
         self.lastName = (try contenaire.decodeIfPresent(String.self, forKey: .last_name))!
         self.userID = (try contenaire.decodeIfPresent(String.self, forKey: ._id))
         self.password = ""
-        self.credential = UserDefault.currentUser?.credential
-        
-        UserDefault.currentUser = self
+        UserDefault.unarchiveCredential()
+        if UserDefault.currentUser?.credential != nil{
+            print(" unarchiving user credential succesfully completed")
+        }
+        else{
+            self.credential = BasicAuth.generateBasicAuthHeader(user: self)
+            UserDefault.archiveCredential(user: self)
+        }
+        //UserDefault.currentUser = self
         //==> fetching user trip
-        
-//            Networking.operation(route: .fetchTrip, user: self) { (data, resp) in
-//
-//                do{
-//                    guard let data = data else {return}
-//                    let list = try JSONDecoder().decode(ListOfTrip?.self, from: data)
-//
-//                    guard let trips = list else{return}
-//                    UserDefault.currentUser?.myTrips = trips
-//                }
-//                catch{}
-//        }
     }
     
     
@@ -68,7 +62,14 @@ extension UserData {
         self.password = password
         self.firstName = firstName
         self.lastName = lastName
-         self.credential = BasicAuth.generateBasicAuthHeader(user: self)
+        
+        UserDefault.unarchiveCredential()
+        if UserDefault.currentUser?.credential != nil{
+            print(" unarchiving user credential succesfully completed")
+        }
+        else{
+        self.credential = BasicAuth.generateBasicAuthHeader(user: self)
+        }
     }
 }
 

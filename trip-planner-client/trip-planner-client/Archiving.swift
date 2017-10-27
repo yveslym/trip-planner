@@ -8,18 +8,18 @@
 
 import Foundation
 
-extension UserData{
-    func archiveUser(user: UserData){
-        // turn userinto a data format(keychain)
-        let data = NSKeyedArchiver.archivedData(withRootObject: user)
-        
-        // save into the crypted user
-        UserDefaults.standard.set(data, forKey: "user")
-    }
-    func unarchiveUser(){
-         NSKeyedUnarchiver.unarchiveObject(withFile: "user")
-    }
-
-}
+//extension UserData{
+//
+//
+//    class UserObject: NSObject, NSCoding{
+//        func encode(with aCoder: NSCoder) {
+//            print("ok")
+//        }
+//
+//        required init?(coder aDecoder: NSCoder) {
+//            print("ok")
+//        }
+//    }
+//}
 
 

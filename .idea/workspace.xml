@@ -3,10 +3,18 @@
   <component name="ChangeListManager">
     <list default="true" id="ab859197-c1c9-4cbc-9d1e-919f4484019f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client.xcodeproj/project.xcworkspace/xcuserdata/yveslym.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client.xcodeproj/project.xcworkspace/xcuserdata/yveslym.xcuserdatad/UserInterfaceState.xcuserstate" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.py" afterPath="$PROJECT_DIR$/app.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/randomUser.py" afterPath="$PROJECT_DIR$/randomUser.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client.xcodeproj/xcuserdata/yveslym.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client.xcodeproj/xcuserdata/yveslym.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/AppDelegate.swift" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/AppDelegate.swift" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/Archiving.swift" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/Archiving.swift" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/Base.lproj/Main.storyboard" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/Base.lproj/Main.storyboard" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/Network.swift" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/Network.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/View Controller/ModifyTripViewController.swift" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/View Controller/ModifyTripViewController.swift" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/Networking.swift" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/Networking.swift" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/Notification center.swift" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/Notification center.swift" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/User.swift" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/User.swift" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/View Controller/HomePageViewController.swift" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/View Controller/HomePageViewController.swift" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/View Controller/RegisterUIViewController.swift" afterPath="$PROJECT_DIR$/trip-planner-client/trip-planner-client/View Controller/RegisterUIViewController.swift" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,13 +26,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="app.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-252">
-              <caret line="88" column="9" lean-forward="false" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
+            <state relative-caret-position="405">
+              <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
               <folding>
                 <element signature="e#0#47#0" expanded="true" />
+                <marker date="1509046725000" expanded="true" signature="328:476" ph="..." />
+                <marker date="1509046725000" expanded="true" signature="786:1546" ph="..." />
+                <marker date="1509046725000" expanded="true" signature="2480:3061" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="randomUser.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/randomUser.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="23" column="29" lean-forward="false" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+              <folding>
+                <marker date="1509058041000" expanded="true" signature="1:124" ph="import ..." />
               </folding>
             </state>
           </provider>
@@ -96,13 +119,14 @@
         <option value="$PROJECT_DIR$/config.cfg" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/app.py" />
+        <option value="$PROJECT_DIR$/randomUser.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="1">
     <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="830" />
+    <option name="height" value="822" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -212,7 +236,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="830" extended-state="1" />
+    <frame x="0" y="23" width="1440" height="822" extended-state="1" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Debug Logs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -221,8 +246,8 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Execute Anonymous" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30884352" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28540772" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31086656" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28540772" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -281,6 +306,9 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
+            <marker date="1509046725000" expanded="true" signature="328:476" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="786:1546" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="2480:3061" ph="..." />
           </folding>
         </state>
       </provider>
@@ -333,6 +361,9 @@
           <caret line="88" column="9" lean-forward="false" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
+            <marker date="1509046725000" expanded="true" signature="328:476" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="786:1546" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="2480:3061" ph="..." />
           </folding>
         </state>
       </provider>
@@ -385,6 +416,9 @@
           <caret line="163" column="29" lean-forward="false" selection-start-line="163" selection-start-column="29" selection-end-line="163" selection-end-column="29" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
+            <marker date="1509046725000" expanded="true" signature="328:476" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="786:1546" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="2480:3061" ph="..." />
           </folding>
         </state>
       </provider>
@@ -437,6 +471,9 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
+            <marker date="1509046725000" expanded="true" signature="328:476" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="786:1546" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="2480:3061" ph="..." />
           </folding>
         </state>
       </provider>
@@ -481,6 +518,9 @@
           <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
+            <marker date="1509046725000" expanded="true" signature="328:476" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="786:1546" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="2480:3061" ph="..." />
           </folding>
         </state>
       </provider>
@@ -539,10 +579,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-252">
-          <caret line="88" column="9" lean-forward="false" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
+        <state relative-caret-position="405">
+          <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
+            <marker date="1509046725000" expanded="true" signature="328:476" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="786:1546" ph="..." />
+            <marker date="1509046725000" expanded="true" signature="2480:3061" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/randomUser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="23" column="29" lean-forward="false" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+          <folding>
+            <marker date="1509058041000" expanded="true" signature="1:124" ph="import ..." />
           </folding>
         </state>
       </provider>

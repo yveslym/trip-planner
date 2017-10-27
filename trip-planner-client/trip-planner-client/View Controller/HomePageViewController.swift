@@ -19,7 +19,7 @@ class HomePageViewController: UIViewController {
         mytable.delegate = self
         mytable.dataSource = self
         
-        // Do any additional setup after loading the view.
+       
     }
     @IBAction func AddTrip(_ sender: Any) {
          self.performSegue(withIdentifier: "add", sender: self)
@@ -30,20 +30,10 @@ class HomePageViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    
     override func viewWillAppear(_ animated: Bool) {
-//        Networking.operation(route: .fetchTrip, user: UserDefault.currentUser) { (data, resp) in
-//
-//            do{
-//                guard let data = data else {return}
-//                let list = try JSONDecoder().decode(ListOfTrip?.self, from: data)
-//                guard let trips = list else{return}
-//
-//                UserDefault.currentUser?.myTrips = trips
-//                self.mytable.reloadData()
-//            }
-//
-//            catch{}
-//        }
+        
         Networking.operation(route: .fetchTrip, user: UserDefault.currentUser) { (data, resp) in
             
             do{

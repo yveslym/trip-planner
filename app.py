@@ -1,14 +1,14 @@
 from flask import Flask, request, make_response
 from flask_restful import Resource, Api
 from pymongo import MongoClient
-# from bson.objectid import ObjectId
+from bson.objectid import ObjectId
 import bcrypt
 import json
 from CustomClass import JSONEncoder
 from flask import jsonify
 import pdb
 from bson import json_util
-# from bson.json_util import dumps
+from bson.json_util import dumps
 import uuid
 # from basicauth import encode, decode
 
@@ -29,13 +29,12 @@ api = Api(app)
 
 def user_auth(func):
     def wrapper(*args,**kwargs):
-        #pdb.set_trace()
-        auth = request.authorization
 
+        auth = request.authorization
 
         username = auth.username
         password = auth.password
-        #pdb.set_trace()
+
         if username is not None and password is not None:
             user_col = app.db.users
             user = user_col.find_one({'email':username})
@@ -43,7 +42,6 @@ def user_auth(func):
             if user is not None:
                 encoded_pw = password.encode("utf-8")
 
-                #pdb.set_trace()
                 if bcrypt.checkpw(encoded_pw, user['password']):
                     return func (*args,**kwargs)
                 else:
@@ -65,13 +63,14 @@ class Trip(Resource):
         self.trip_id = uuid.uuid4().hex[:20]
     @user_auth
     def post(self):
-
+        #pdb.set_trace()
         trip_collect = app.db.trips
         trip_json = request.json
 
         name = request.json.get('name')
         destination = request.json.get('destination')
-        user = request.json.get('user_id')
+        user = request.headers.get("user_id")
+
 
         #pdb.set_trace()
         #print(name+ " "+" "+destination+" "+user)
@@ -236,4 +235,4 @@ if __name__ == '__main__':
     # Turn this on in debug mode to get detailled information about request
     # related exceptions: http://flask.pocoo.org/docs/0.10/config/
     app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-    app.run(debug=True, port=8088)
+    app.run(debug=True, port=8089)

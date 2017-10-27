@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // ==> if ever login before send tto the home page
         if UserDefaults.standard.bool(forKey: "everLogin"){
             print("welcome back")
+            UserDefault.Relogin()
             let homeViewController = storyboard.instantiateViewController(withIdentifier: "homevc")
             self.window?.rootViewController = homeViewController
             self.window?.makeKeyAndVisible()

@@ -35,13 +35,9 @@ class RegisterUIViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     @IBAction func loginTapped(_ sender: Any) {
-        
-        _ = "send credential"
-        
-        //==> Login user
+    
+//==> Login user
         if loginButton.titleLabel?.text == "Login"{
-            
-            
             
             let user = UserData(email: email.text, password: password.text)
             UserDefault.currentUser = user
@@ -64,6 +60,7 @@ class RegisterUIViewController: UIViewController {
                         
                         DispatchQueue.main.async {
                             if UserDefault.currentUser != nil{
+                                UserDefault.archiveCredential(user: UserDefault.currentUser!)
                                  UserDefaults.standard.set(true, forKey: "everLogin")
                                 self.performSegue(withIdentifier: "login", sender: self)
                             }
@@ -73,7 +70,8 @@ class RegisterUIViewController: UIViewController {
                 }catch{}
             })
         }
-            //==> register user
+            
+//==> register user
         else {
             let user = UserData(email: email.text, password: password.text, firstName: fname.text, lastName: lname.text)
             UserDefault.currentUser = user
@@ -89,13 +87,18 @@ class RegisterUIViewController: UIViewController {
                         
                     }
                         //==> deserilization of data
+                    else if response == 201{
+                        print("succesfully register")
+                        
+                    }
                     else{
-                        let user = try JSONDecoder().decode(UserData.self, from: data!)
-                        UserDefault.currentUser = user
+                        print("there's a network error")
                     }
                     
                     DispatchQueue.main.async {
                         if UserDefault.currentUser != nil{
+                            UserDefault.currentUser?.password = ""
+                            UserDefault.archiveCredential(user: UserDefault.currentUser!)
                             UserDefaults.standard.set(true, forKey: "everLogin")
                             self.performSegue(withIdentifier: "login", sender: self)
                         }

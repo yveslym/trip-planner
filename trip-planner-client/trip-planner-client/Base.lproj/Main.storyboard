@@ -78,10 +78,10 @@
             </objects>
             <point key="canvasLocation" x="-306" y="152"/>
         </scene>
-        <!--RegisterUI View Controller-->
+        <!--registervc-->
         <scene sceneID="Msn-LX-I05">
             <objects>
-                <viewController id="jm9-6z-fZe" customClass="RegisterUIViewController" customModule="trip_planner_client" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="registervc" title="registervc" id="jm9-6z-fZe" customClass="RegisterUIViewController" customModule="trip_planner_client" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4cA-0I-fb0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -230,10 +230,10 @@
             </objects>
             <point key="canvasLocation" x="654" y="152"/>
         </scene>
-        <!--Home Page View Controller-->
+        <!--homevc-->
         <scene sceneID="MgH-QW-X9B">
             <objects>
-                <viewController storyboardIdentifier="homevc" id="T9e-rV-mYp" customClass="HomePageViewController" customModule="trip_planner_client" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="homevc" title="homevc" id="T9e-rV-mYp" customClass="HomePageViewController" customModule="trip_planner_client" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bSd-eH-SQZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
